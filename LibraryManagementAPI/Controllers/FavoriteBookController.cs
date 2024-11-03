@@ -19,11 +19,6 @@ namespace LibraryManagementAPI.Controllers
             _favoritesListDao = favoritesListDao;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [HttpGet("{bookId}")]
         public async Task<IActionResult> GetTotalLikes(int bookId)
         {
