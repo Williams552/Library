@@ -1,0 +1,98 @@
+﻿html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+small, .small {
+    font-size: 0.875em;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+        background-color: #0056b3;
+}
+
+/* Tạo vòng tròn bao quanh trái tim */
+.favorite-circle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f8d7da; /* Màu nền nhạt để nổi bật trái tim */
+    cursor: pointer;
+}
+
+    /* Định dạng biểu tượng trái tim */
+    .favorite-circle .fa-heart {
+        font-size: 18px;
+    }
+
+    /* Ẩn chữ "Yêu thích" mặc định */
+    .favorite-circle .favorite-text {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50px; /* Đặt cách bên phải biểu tượng trái tim */
+        transform: translateY(-50%);
+        white-space: nowrap;
+        background-color: #fff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Hiển thị chữ "Yêu thích" khi hover vào biểu tượng trái tim */
+    .favorite-circle:hover .favorite-text {
+        display: block;
+    }
+/* Tăng kích thước của các ngôi sao */
+.stars .fa-star {
+    font-size: 24px; /* Tăng kích thước ngôi sao */
+    margin-right: 2px; /* Tạo khoảng cách nhỏ giữa các ngôi sao */
+}
+
+    .stars .fa-star.checked {
+        color: #FFD700; /* Màu vàng cho ngôi sao được đánh giá */
+    }
+
+.stars .fa-star {
+    color: #ccc; /* Màu xám cho ngôi sao chưa được đánh giá */
+}
+
+/* Căn giữa rating với margin tự động trên và dưới */
+.rating {
+    text-align: center; /* Căn giữa rating */
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 10px 0; /* Tạo khoảng trống cho rating */
+}

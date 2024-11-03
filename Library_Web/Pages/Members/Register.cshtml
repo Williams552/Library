@@ -1,0 +1,109 @@
+﻿@page
+@model Library_Web.Pages.Members.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header">
+                    <h3 class="text-center font-weight-light my-4">Đăng Kí</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" asp-for="member.Username">
+                            <label asp-for="member.Username">Tài khoản:</label>
+                            <span asp-validation-for="member.Username" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" asp-for="member.Password">
+                            <label asp-for="member.Password">Mật khẩu:</label>
+                            <span asp-validation-for="member.Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" asp-for="member.FullName">
+                            <label asp-for="member.FullName">Tên Đầy Đủ:</label>
+                            <span asp-validation-for="member.FullName" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control" asp-for="member.DateOfBirth">
+                            <label asp-for="member.DateOfBirth">Ngày sinh:</label>
+                            <span asp-validation-for="member.DateOfBirth" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Giới Tính:</label>
+                            <div class="d-flex">
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" asp-for="member.Gender" value="Nam" id="genderMale">
+                                    <label class="form-check-label" for="genderMale">Nam</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" asp-for="member.Gender" value="Nữ" id="genderFemale">
+                                    <label class="form-check-label" for="genderFemale">Nữ</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" asp-for="member.Gender" value="Khác" id="genderOther">
+                                    <label class="form-check-label" for="genderOther">Khác</label>
+                                </div>
+                            </div>
+                            <span asp-validation-for="member.Gender" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" asp-for="member.Email">
+                            <label asp-for="member.Email">Email:</label>
+                            <span asp-validation-for="member.Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" asp-for="member.PhoneNumber">
+                            <label asp-for="member.PhoneNumber">Số Điện Thoại:</label>
+                            <span asp-validation-for="member.PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" asp-for="member.Address">
+                            <label asp-for="member.Address">Địa Chỉ:</label>
+                            <span asp-validation-for="member.Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" asp-for="member.IdCardNumber">
+                            <label asp-for="member.IdCardNumber">Chứng Minh Thư:</label>
+                            <span asp-validation-for="member.IdCardNumber" class="text-danger"></span>
+                        </div>
+                        <input type="hidden" asp-for="member.Role" value="Member" />
+
+
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <p style="color:red">@TempData["ErrorMessage"]</p>
+                        }
+                        <div class="row">
+                            <div class="col-6 text-left">
+                                <!-- Nút quên mật khẩu -->
+                                <a class="small" asp-area="" asp-controller="Account"
+                                   asp-action="ForgotPassword" style="text-decoration: none;">
+                                    Quên mật khẩu?
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <!-- Nút đăng ký -->
+                                <a asp-page="/Members/Login" style="text-decoration: none;">Đăng Nhập</a>
+                            </div>
+                        </div>
+                        <hr>
+                        <button type="submit" class="btn-primary btn-user btn-block">Đăng Ký</button>
+                        <hr>
+                        @* <a href="index.html" class="btn btn-google btn-user btn-block">
+                        <i class="fab fa-google fa-fw" style="background-color: re;"></i> Login with
+                        Google
+                        </a>
+                        <a href="index.html" class="btn btn-facebook btn-user btn-block">
+                        <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
+                        </a> *@
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
