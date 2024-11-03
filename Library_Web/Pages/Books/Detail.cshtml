@@ -31,34 +31,33 @@
                         </div>
                         <div class="details col-md-6">
                             <h3 class="product-title">@Model.book.Title</h3>
-                            <div class="rating">
-                                <div class="stars">
-                                    <span class="fa fa-star checked"></span>
-                                    <span class="fa fa-star checked"></span>
-                                    <span class="fa fa-star checked"></span>
-                                    <span class="fa fa-star"></span>
-                                    <span class="fa fa-star"></span>
+                            <div class="rating d-flex justify-content-center align-items-center mb-2">
+                                <div class="stars d-flex">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= 5) // Rating là giá trị đánh giá từ 1-5
+                                        {
+                                            <span class="fa fa-star checked"></span> <!-- Sao đã đánh giá -->
+                                        }
+                                        else
+                                        {
+                                            <span class="fa fa-star"></span> <!-- Sao chưa được đánh giá -->
+                                        }
+                                    }
                                 </div>
-                                <span class="review-no">@Model.book.Views</span>
                             </div>
-                            <p class="product-description">@Model.book.Description</p>
-                            <small class="text-muted">Giá cũ: <s><span>@String.Format("{0:0,0}", Model.book.Price) vnđ</span></s></small>
-                            <h4 class="price">Giá hiện tại: <span>@String.Format("{0:0,0}", Model.book.Price) vnđ</span></h4>
-                            <p class="vote">
-                                <strong>100%</strong> hàng <strong>Chất lượng</strong>, đảm bảo
-                                <strong>Uy tín</strong>!
-                            </p>
+                            <h5> Giá: @String.Format("{0:0,0}", Model.book.Price) vnđ</h5>
+                            <h5 class="review-no"> Lượt xem: @Model.book.Views
+                                <div class="favorite-circle">
+                                    <span class="fa fa-heart text-danger"></span>
+                                    <span class="favorite-text">Yêu thích</span>
+                                </div>
+                            </h5>
                             <h5 class="sizes">
-                                Số lượng có sẵn: <span>@Model.book.AvailableCopies</span>
+                                Số lượng có còn lại: <span>@Model.book.AvailableCopies</span>
                             </h5>
                             <div class="form-group">
-                                <label for="soluong">Số lượng đặt mua:</label>
-                                <input type="number" class="form-control" id="soluong" name="soluong" min="1" max="@Model.book.AvailableCopies">
-                            </div>
-                            <div class="action">
-                                <a class="add-to-cart btn btn-default" id="btnThemVaoGioHang">Thêm vào giỏ hàng</a>
-                                <a class="like btn btn-default" href="#"><span class="fa fa-heart"></span></a>
-                            </div>
+                            <button class="btn btn-primary" >Mua Sách</button>
                         </div>
                     </div>
                 </form>
@@ -67,13 +66,14 @@
 
         <div class="card mt-4">
             <div class="container-fluid">
-                <h3>Thông tin chi tiết về Sách</h3>
+                <h3>Giới Thiệu</h3>
                 <div class="row">
                     <div class="col">
                         <p>Tác giả: <strong>@Model.book.Author.FullName</strong></p>
                         <p>Năm xuất bản: <strong>@Model.book.PublishYear</strong></p>
                         <p>Thể loại: <strong>@Model.book.Category.Name</strong></p>
                         <p>Nhà xuất bản: <strong>@Model.book.Publisher.Name</strong></p>
+                        <p class="product-description">@Model.book.Description</p>
                     </div>
                 </div>
             </div>
