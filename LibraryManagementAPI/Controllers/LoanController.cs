@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccess.DAOs;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Repository;
 using Repository.interfaces;
@@ -36,9 +37,36 @@ namespace LibraryManagementAPI.Controllers
             return Ok(loan);
         }
 
+        //[HttpPost]
+        //public async Task<ActionResult> CreateLoan(Loan loan)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState); // Trả về lỗi chi tiết của ModelState
+        //    }
+        //    await _item.create(loan);
+        //    return CreatedAtAction(nameof(GetLoanById), new { id = loan.LoanId }, loan);
+        //}
         [HttpPost]
-        public async Task<ActionResult> CreateLoan(Loan loan)
+        public async Task<ActionResult> CreateLoan([FromBody] LoanDTO loanDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var loan = new Loan
+            {
+                UserId = loanDto.UserId,
+                CopyId = loanDto.CopyId,
+                LoanDate = loanDto.LoanDate,
+                ReturnDate = loanDto.ReturnDate,
+                DueDate = loanDto.DueDate,
+                Fine = loanDto.Fine,
+                BorrowFee = loanDto.BorrowFee,
+                Status = loanDto.Status
+            };
+
             await _item.create(loan);
             return CreatedAtAction(nameof(GetLoanById), new { id = loan.LoanId }, loan);
         }
@@ -46,10 +74,10 @@ namespace LibraryManagementAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateLoan(int id, Loan loan)
         {
-            if (id != loan.LoanId)
-            {
-                return BadRequest();
-            }
+            //if (id != loan.LoanId)
+            //{
+            //    return BadRequest();
+            //}
             await _item.update(loan);
             return Ok();
         }

@@ -158,6 +158,19 @@ namespace WpfLibrary
 
         }
 
+        private void ClearFieldsLoan()
+        {
+            txtUserId.Clear();
+            txtCopyId.Clear();
+            dpLoanDate.SelectedDate = null;
+            dpReturnDate.SelectedDate = null;
+            dpDueDate.SelectedDate = null;
+            txtFine.Clear();
+            txtBorrowFee.Clear();
+            txtStatus.Clear();
+
+        }
+
         private void myDataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
             if (myDataGridSupplier.SelectedItem is Supplier selectedSupplier)
@@ -665,6 +678,99 @@ namespace WpfLibrary
             {
                 MessageBox.Show("Vui lòng chọn bookshelf cần xóa.");
             }
+        }
+
+        private void myDataGrid_SelectionChanged_2(object sender, SelectionChangedEventArgs e)
+        {
+            if (myLoan.SelectedItem is Loan selectedLoan)
+            {
+                // Cập nhật các trường nhập liệu với thông tin của danh mục đã chọn
+                txtUserId.Text = selectedLoan.UserId.ToString();
+                txtCopyId.Text = selectedLoan.CopyId.ToString();
+                dpLoanDate.SelectedDate = selectedLoan.LoanDate;
+                dpReturnDate.SelectedDate = selectedLoan.ReturnDate;
+                dpDueDate.SelectedDate = selectedLoan.DueDate;
+                txtFine.Text = selectedLoan.Fine.ToString();
+                txtBorrowFee.Text = selectedLoan.BorrowFee.ToString();
+                txtStatus.Text = selectedLoan.Status;
+            }
+        }
+
+
+        private void AddLoan_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtUserId.Text) &&
+        !string.IsNullOrEmpty(txtCopyId.Text) &&
+        dpLoanDate.SelectedDate.HasValue &&
+        dpReturnDate.SelectedDate.HasValue &&
+        dpDueDate.SelectedDate.HasValue &&
+        !string.IsNullOrEmpty(txtFine.Text) &&
+        !string.IsNullOrEmpty(txtBorrowFee.Text) &&
+        !string.IsNullOrEmpty(txtStatus.Text))
+            {
+
+
+                var newLoan = new Loan
+                {
+
+                    UserId = Int32.Parse(txtUserId.Text),
+                    CopyId = Int32.Parse(txtCopyId.Text),
+                    LoanDate = dpLoanDate.SelectedDate.Value,
+                    ReturnDate = dpReturnDate.SelectedDate.Value,
+                    DueDate = dpDueDate.SelectedDate.Value,
+                    Fine = decimal.Parse(txtFine.Text),
+                    BorrowFee = decimal.Parse(txtBorrowFee.Text),
+                    Status = txtStatus.Text
+                };
+
+                _LibraryViewModel.AddLoanAsync(newLoan);
+
+
+
+                ClearFieldsLoan();
+
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin danh mục.");
+            }
+        }
+
+        private void UpdateLoan_Click(object sender, RoutedEventArgs e)
+        {
+            if (myLoan.SelectedItem is Loan selectedLoan)
+            {
+                selectedLoan.UserId = Int32.Parse(txtUserId.Text);
+                selectedLoan.CopyId = Int32.Parse(txtCopyId.Text);
+                selectedLoan.LoanDate = dpLoanDate.SelectedDate.Value;
+                selectedLoan.ReturnDate = dpReturnDate.SelectedDate.Value;
+                selectedLoan.DueDate = dpDueDate.SelectedDate.Value;
+                selectedLoan.Fine = decimal.Parse(txtFine.Text);
+                selectedLoan.BorrowFee = decimal.Parse(txtBorrowFee.Text);
+                selectedLoan.Status = txtStatus.Text;
+
+
+
+
+                _LibraryViewModel.UpdateLoanAsync(selectedLoan);
+                ClearFieldsLoan();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần cập nhật.");
+            }
+        }
+
+        private void ClearLoan_Click(object sender, RoutedEventArgs e)
+        {
+            txtUserId.Clear();
+            txtCopyId.Clear();
+            dpLoanDate.SelectedDate = null;
+            dpReturnDate.SelectedDate = null;
+            dpDueDate.SelectedDate = null;
+            txtFine.Clear();
+            txtBorrowFee.Clear();
+            txtStatus.Clear();
         }
     }
 }

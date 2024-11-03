@@ -29,6 +29,8 @@ namespace WpfLibrary.ViewModel
 
         public ObservableCollection<Bookshelf> bookShelfs { get; set; } = new ObservableCollection<Bookshelf>();
 
+        public ObservableCollection<Loan> loans { get; set; } = new ObservableCollection<Loan>();
+
         public Models.Staff SelectedStaff { get; set; } = new Models.Staff();
         public Supplier SelectedSupplier { get; set; } = new Supplier();
         public Category SelectedCate { get; set; }
@@ -38,6 +40,8 @@ namespace WpfLibrary.ViewModel
         public BookGroup SelectedBookGroup { get; set; }
 
         public Bookshelf SelectedBookshelf { get; set; }
+
+        public Loan SelectedLoan { get; set; }
 
         public ICommand AddStaffCommand { get; }
         public ICommand UpdateStaffCommand { get; }
@@ -58,6 +62,7 @@ namespace WpfLibrary.ViewModel
             LoadSupplierAsync();
             LoadBookGroupsAsync();
             LoadBookshelfAsync();
+            LoadLoanAsync();
 
             //AttachJwtTokenToClient();
 
@@ -67,6 +72,19 @@ namespace WpfLibrary.ViewModel
 
             AddSupplierCommand = new RelayCommand(async (supplier) => await AddSupplierAsync((Supplier)supplier));
             UpdateSupplierCommand = new RelayCommand(async (supplier) => await UpdateSupplierAsync((Supplier)supplier));
+        }
+
+        private async Task LoadLoanAsync()
+        {
+            var loanList = await _httpClient.GetFromJsonAsync<List<Loan>>("Loan");
+            if (loanList != null)
+            {
+                loans.Clear();
+                foreach (var loan in loanList)
+                {
+                    loans.Add(loan);
+                }
+            }
         }
 
         private bool CanDelete(object? arg)
@@ -453,6 +471,32 @@ namespace WpfLibrary.ViewModel
             {
                 var bookshelf = bookShelfs.FirstOrDefault(c => c.ShelfId == bookshelfId);
                 if (bookshelf != null) bookShelfs.Remove(bookshelf);
+            }
+        }
+
+        public async Task AddLoanAsync(Loan loan)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Loan", loan);
+            if (response.IsSuccessStatusCode)
+            {
+                loans.Add(loan);
+                SelectedLoan = new Loan();
+            }
+        }
+
+        public async Task UpdateLoanAsync(Loan loan)
+        {
+            if (loan != null)
+            {
+                var response = await _httpClient.PutAsJsonAsync($"Loan/{loan.LoanId}", loan);
+                if (response.IsSuccessStatusCode)
+                {
+                    var index = loans.IndexOf(loans.First(s => s.LoanId == loan.LoanId));
+                    if (index >= 0)
+                    {
+                        loans[index] = loan;
+                    }
+                }
             }
         }
 
