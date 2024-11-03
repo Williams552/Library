@@ -1,0 +1,410 @@
+﻿<Window x:Class="WpfLibrary.Staff"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfLibrary"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Staff" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <materialDesign:Card
+ >
+            <TabControl
+    VerticalContentAlignment="Bottom"
+    materialDesign:ColorZoneAssist.Mode="PrimaryMid"
+    Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+   >
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Width="auto" Height="auto">
+                            <materialDesign:PackIcon Width="24" Height="24" HorizontalAlignment="Center" Kind="AccountGroup" />
+                            <TextBlock HorizontalAlignment="Center" Text="Staff" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <StackPanel Margin="16">
+                        <TextBlock Margin="0,0,0,8" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Staff Management" />
+                        <TextBlock Height="11">
+            <LineBreak />
+            <LineBreak />
+                        </TextBlock>
+
+                        <!-- DataGrid for displaying staff members -->
+                        <DataGrid Height="400px" IsReadOnly="False" ItemsSource="{Binding StaffMembers}" 
+                  SelectedItem="{Binding SelectedStaff}" SelectionChanged="myDataGrid_SelectionChanged"
+                  AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" x:Name="myDataGrid">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#333" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Padding" Value="5" />
+                                    <Setter Property="BorderBrush" Value="White" />
+                                    <Setter Property="BorderThickness" Value="0.5" />
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn IsReadOnly="True" Header="ID" Binding="{Binding StaffId}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="Username" Binding="{Binding Username}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="Password" Binding="{Binding Password}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding FullName}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="Email" Binding="{Binding Email}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="Role" Binding="{Binding Role}" />
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" Margin="0,10,10,0" Width="696" Height="228">
+                            <StackPanel Margin="10" HorizontalAlignment="Center" Orientation="Horizontal">
+                                <StackPanel Margin="0,0,10,0" >
+                                    <TextBlock FontWeight="Bold" Text="Staff ID" Margin="5" />
+                                    <TextBox x:Name="txtStaffid" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewStaff.StaffId, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+
+                                    <TextBlock FontWeight="Bold" Text="Username" Margin="5" />
+                                    <TextBox x:Name="txtUsername" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewStaff.Username, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+                                    <TextBlock FontWeight="Bold" Text="Password" Margin="5" />
+                                    <TextBox x:Name="txtPassword" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewStaff.Password, UpdateSourceTrigger=PropertyChanged}" Width="250" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock FontWeight="Bold" Text="Full Name" Margin="5" />
+                                    <TextBox x:Name="txtFullname" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewStaff.FullName, UpdateSourceTrigger=PropertyChanged}" Width="250" />
+
+                                    <TextBlock FontWeight="Bold" Text="Email" Margin="5" />
+                                    <TextBox x:Name="txtEmail" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewStaff.Email, UpdateSourceTrigger=PropertyChanged}" Width="250" />
+
+                                    <TextBlock FontWeight="Bold" Text="Role" Margin="5" />
+                                    <TextBox x:Name="txtRole" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewStaff.Role, UpdateSourceTrigger=PropertyChanged}" Width="250" />
+                                </StackPanel>
+
+
+
+
+                            </StackPanel>
+
+                            <!-- Buttons for CRUD operations -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                                <Button Click="Add_Click" Content="Add" Command="{Binding AddCommand}" Width="100" Margin="0,0,5,0" />
+                                <Button Click="Update_Click" Content="Update" Command="{Binding UpdateCommand}" Width="100" Margin="5,0,5,0" />
+                                <Button Click="Delete_Click" Content="Delete" Command="{Binding DeleteCommand}" Width="100" Margin="5,0,5,0" />
+                                <Button Click="Clear_Click" Content="Clear" Command="{Binding ClearCommand}" Width="100" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Width="auto" Height="auto">
+                            <materialDesign:PackIcon Width="24" Height="24" HorizontalAlignment="Center" Kind="Basket" />
+                            <TextBlock HorizontalAlignment="Center" Text="Supplier" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <StackPanel Margin="16">
+                        <TextBlock Margin="0,0,0,8" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Supplier Management" />
+
+                        <!-- DataGrid for displaying suppliers -->
+                        <DataGrid Height="160" IsReadOnly="False" ItemsSource="{Binding suppliers}" 
+                  SelectedItem="{Binding SelectedSupplier}" SelectionChanged="myDataGrid_SelectionChanged_1"
+                  AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" x:Name="myDataGridSupplier">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#333" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Padding" Value="5" />
+                                    <Setter Property="BorderBrush" Value="White" />
+                                    <Setter Property="BorderThickness" Value="0.5" />
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn IsReadOnly="True" Header="ID" Binding="{Binding SupplierId}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Name}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="Contact Info" Binding="{Binding ContactInfo}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="0,10,10,0" Width="696" Height="228">
+                            <StackPanel Margin="10" HorizontalAlignment="Center" Orientation="Horizontal">
+                                <StackPanel Margin="0,0,10,0">
+                                    <TextBlock FontWeight="Bold" Text="Name" Margin="5" />
+                                    <TextBox x:Name="txtSupplierName" BorderBrush="#333" BorderThickness="0.5" 
+                             Text="{Binding NewSupplier.Name, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+
+                                    <TextBlock FontWeight="Bold" Text="Contact Info" Margin="5" />
+                                    <TextBox x:Name="txtContactInfo" BorderBrush="#333" BorderThickness="0.5" 
+                             Text="{Binding NewSupplier.ContactInfo, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- Buttons for CRUD operations -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                                <Button Click="AddSupplier_Click" Content="Add" Command="{Binding AddSupplierCommand}" Width="100" Margin="0,0,5,0" />
+                                <Button Click="UpdateSupplier_Click" Content="Update" Command="{Binding UpdateSupplierCommand}" Width="100" Margin="5,0,5,0" />
+                                <Button Click="DeleteSupplier_Click" Content="Delete" Command="{Binding DeleteSupplierCommand}" Width="100" Margin="5,0,5,0" />
+                                <Button Click="ClearSupplier_Click" Content="Clear" Command="{Binding ClearSupplierCommand}" Width="100" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+          Width="auto"
+          Height="auto">
+                            <materialDesign:PackIcon
+            Width="24"
+            Height="24"
+            HorizontalAlignment="Center"
+            Kind="EqualBox" />
+                            <TextBlock
+            HorizontalAlignment="Center"
+            Text="Category" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel
+        Margin="16">
+                        <TextBlock
+          Margin="0,0,0,8"
+          Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+          Text="Categoty Management" />
+                        <TextBlock Height="11">
+          
+          <LineBreak />
+                            
+          <LineBreak />
+                        </TextBlock>
+
+                        <DataGrid Height="400px" IsReadOnly="True" ItemsSource="{Binding Cate}" SelectedItem="{Binding SelectedCate}" 
+                                AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" SelectionChanged="mydata_SelectionChanged" x:Name="mydata">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#333" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Padding" Value="5" />
+                                    <Setter Property="BorderBrush" Value="White"/>
+                                    <Setter Property="BorderThickness" Value="0.5"/>
+                                </Style>
+
+
+
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding CategoryId}" Width="*"/>
+                                <DataGridTextColumn Header="Category Code" Binding="{Binding CategoryCode}" Width="*"/>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="2*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal"  HorizontalAlignment="Center" Margin="0,0,10,0">
+                            <!-- Form for adding/editing category -->
+
+
+                            <StackPanel Margin="10">
+                                <TextBlock FontWeight="Bold" Text="Category Code" Margin="5"/>
+                                <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="txtCode" Text="{Binding SelectedCate.CategoryCode, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+                            </StackPanel>
+                            <StackPanel Margin="10">
+                                <TextBlock FontWeight="Bold" Text="Name" Margin="5"/>
+                                <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="txtName" Text="{Binding SelectedCate.Name, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="10">
+                                <TextBlock FontWeight="Bold" Text="Description" Margin="5"/>
+                                <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="txtDiscription" Text="{Binding SelectedCate.Description, UpdateSourceTrigger=PropertyChanged}" 
+                                Width="350" Height="60" AcceptsReturn="True" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <!-- Buttons for CRUD operations -->
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="10">
+                            <Button Click="Add_button" Content="Add" Command="{Binding AddCommand}" Width="100" Margin="0,0,0,0"/>
+                            <Button Click="Update_Button" Content="Update" Command="{Binding UpdateCommand}" Width="100" Margin="5,0,5,0"/>
+                            <Button Click="Delete_Button"  Content="Delete" Command="{Binding DeleteCommand}" Width="100"/>
+
+                        </StackPanel>
+
+
+
+                    </StackPanel>
+
+
+                </TabItem>
+
+
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+          Width="auto"
+          Height="auto">
+                            <materialDesign:PackIcon
+            Width="24"
+            Height="24"
+            HorizontalAlignment="Center"
+            Kind="Cash" />
+                            <TextBlock
+            HorizontalAlignment="Center"
+            Text="Fee" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel
+        Margin="16">
+                        <TextBlock
+          Margin="0,0,0,8"
+          Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+          Text="Fee Management" />
+                        <TextBlock>
+          
+          <LineBreak />
+          <LineBreak />
+                        </TextBlock>
+                        <DataGrid Height="400px" IsReadOnly="True" ItemsSource="{Binding fee}" SelectedItem="{Binding SelectedFee}" 
+        AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" SelectionChanged="mydata1_SelectionChanged" x:Name="mydata1">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#333" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Padding" Value="5" />
+                                    <Setter Property="BorderBrush" Value="White"/>
+                                    <Setter Property="BorderThickness" Value="0.5"/>
+                                </Style>
+
+
+
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                <DataGridTextColumn Header="Fee Type" Binding="{Binding FeeType}" Width="*"/>
+
+                                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="*"/>
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="2*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal"  HorizontalAlignment="Center" Margin="0,0,10,0">
+                            <!-- Form for adding/editing category -->
+
+
+                            <StackPanel Margin="10">
+                                <TextBlock FontWeight="Bold" Text="Name" Margin="5"/>
+                                <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="txtName1" Text="{Binding SelectedFee.Name, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+                            </StackPanel>
+                            <StackPanel Margin="10">
+                                <TextBlock FontWeight="Bold" Text="Fee Type" Margin="5"/>
+                                <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="txtFeeType1" Text="{Binding SelectedFee.FeeType, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="10">
+                                <TextBlock FontWeight="Bold" Text="Amount" Margin="5"/>
+                                <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="txtAmount1" Text="{Binding SelectedFee.Amount, UpdateSourceTrigger=PropertyChanged}" 
+             Width="150" />
+                            </StackPanel>
+                            <StackPanel Margin="10">
+                                <TextBlock FontWeight="Bold" Text="Description" Margin="5"/>
+                                <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="txtDescription1" Text="{Binding SelectedFee.Description, UpdateSourceTrigger=PropertyChanged}" 
+             Width="150" Height="60" AcceptsReturn="True" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <!-- Buttons for CRUD operations -->
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="10">
+                            <Button Click="AddFee_button" Content="Add" Command="{Binding AddCommand}" Width="100" Margin="0,0,0,0"/>
+                            <Button Click="UpdateFee_Button" Content="Update" Command="{Binding UpdateCommand}" Width="100" Margin="5,0,5,0"/>
+                            <Button Click="DeleteFee_Button"  Content="Delete" Command="{Binding DeleteCommand}" Width="100"/>
+
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+Width="auto"
+Height="auto">
+                            <materialDesign:PackIcon
+  Width="24"
+  Height="24"
+  HorizontalAlignment="Center"
+  Kind="BookAccount" />
+                            <TextBlock
+  HorizontalAlignment="Center"
+  Text="Publishers" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel Margin="16">
+                        <TextBlock Margin="0,0,0,8"
+         Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+         Text="Publishers Management" />
+                        <DataGrid Height="100px" IsReadOnly="True" ItemsSource="{Binding Pub}" SelectedItem="{Binding SelectedPub}" 
+AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" SelectionChanged="mydata2_SelectionChanged" x:Name="mydata2">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#333" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Padding" Value="5" />
+                                    <Setter Property="BorderBrush" Value="White"/>
+                                    <Setter Property="BorderThickness" Value="0.5"/>
+                                </Style>
+
+
+
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding PublisherId}" Width="*"/>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal"  HorizontalAlignment="Center" Margin="0,0,10,0">
+                            <!-- Form for adding/editing category -->
+
+
+
+                            <StackPanel Margin="10">
+                                <TextBlock FontWeight="Bold" Text="Name" Margin="5"/>
+                                <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="PubName" Text="{Binding SelectedPub.Name, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="10">
+                                <TextBlock FontWeight="Bold" Text="Address" Margin="5"/>
+                                <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="PubAddress" Text="{Binding SelectedPub.Address, UpdateSourceTrigger=PropertyChanged}" 
+         Width="350" Height="60" AcceptsReturn="True" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <!-- Buttons for CRUD operations -->
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="10">
+                            <Button Click="Add_Pub" Content="Add" Command="{Binding AddCommand}" Width="100" Margin="0,0,0,0"/>
+                            <Button Click="Update_Pub" Content="Update" Command="{Binding UpdateCommand}" Width="100" Margin="5,0,5,0"/>
+                            <Button Click="Delete_Pub"  Content="Delete" Command="{Binding DeleteCommand}" Width="100"/>
+
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </materialDesign:Card>
+    </Grid>
+</Window>
