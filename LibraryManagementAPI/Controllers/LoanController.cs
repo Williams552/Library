@@ -26,31 +26,31 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Loan>> GetAuthorById(int id)
+        public async Task<ActionResult<Loan>> GetLoanById(int id)
         {
-            var author = await _item.findById(id);
-            if (author == null)
+            var loan = await _item.findById(id);
+            if (loan == null)
             {
                 return NotFound();
             }
-            return Ok(author);
+            return Ok(loan);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateAuthor(Loan author)
+        public async Task<ActionResult> CreateLoan(Loan loan)
         {
-            await _item.create(author);
-            return CreatedAtAction(nameof(GetAuthorById), new { id = author.LoanId }, author);
+            await _item.create(loan);
+            return CreatedAtAction(nameof(GetLoanById), new { id = loan.LoanId }, loan);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAuthor(int id, Loan author)
+        public async Task<IActionResult> UpdateLoan(int id, Loan loan)
         {
-            if (id != author.LoanId)
+            if (id != loan.LoanId)
             {
                 return BadRequest();
             }
-            await _item.update(author);
+            await _item.update(loan);
             return Ok();
         }
 

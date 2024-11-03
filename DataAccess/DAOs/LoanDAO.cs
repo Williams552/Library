@@ -20,7 +20,7 @@ namespace DataAccess.DAOs
             _jwtTokenService = jwtTokenService;
             _httpContextAccessor = httpContextAccessor;
         }
-        private int GetUserId()
+        public int GetUserId()
         {
             var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
