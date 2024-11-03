@@ -67,6 +67,10 @@ builder.Services.AddScoped<FeeDAO, FeeDAO>();
 builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
 builder.Services.AddScoped<PublisherDAO, PublisherDAO>();
 
+// Loan
+builder.Services.AddScoped<ILoanRepository, LoanRepository>();
+builder.Services.AddScoped<LoanDAO, LoanDAO>();
+
 // Supplier
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<SupplierDAO, SupplierDAO>();
