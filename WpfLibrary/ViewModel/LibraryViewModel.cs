@@ -50,6 +50,8 @@ namespace WpfLibrary.ViewModel
             LoadStaffAsync();
             LoadSupplierAsync();
 
+            //AttachJwtTokenToClient();
+
             AddStaffCommand = new RelayCommand(async (staff) => await AddStaffAsync((Models.Staff)staff));
             UpdateStaffCommand = new RelayCommand(async (staff) => await UpdateStaffAsync((Models.Staff)staff), CanUpdate);
             DeleteStaffCommand = new RelayCommand(async (staff) => await DeleteStaffAsync(((Models.Staff)staff).StaffId), CanDelete);
@@ -346,6 +348,8 @@ namespace WpfLibrary.ViewModel
                 }
             }
         }
+
+
 
     }
 }
