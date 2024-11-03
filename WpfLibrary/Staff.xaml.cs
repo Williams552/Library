@@ -503,5 +503,168 @@ namespace WpfLibrary
             }
 
         }
+
+        private void BookGroupData_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (BookGroupData.SelectedItem is BookGroup select)
+            {
+                BookName.Text = select.Name;
+                BookDes.Text = select.Description;
+            }
+        }
+
+        private void Update_BookGroup(object sender, RoutedEventArgs e)
+        {
+            if (BookGroupData.SelectedItem is BookGroup select)
+            {
+                select.Name = BookName.Text;
+                select.Description = BookDes.Text;
+
+                _LibraryViewModel.UpdateBookgroupAsync(select);
+                ClearFields();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần cập nhật.");
+            }
+        }
+
+        private void Delete_BookGroup(object sender, RoutedEventArgs e)
+        {
+            if (BookGroupData.SelectedItem is BookGroup select)
+            {
+
+                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa nhóm sách này không?",
+                                               "Xác nhận xóa",
+                                               MessageBoxButton.YesNo,
+                                               MessageBoxImage.Warning);
+
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    _LibraryViewModel.DeleteBookgroupAsync(select.GroupId);
+
+
+
+                    ClearFields();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn nhóm sách cần xóa.");
+            }
+        }
+
+        private void Add_BookGroup(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(BookName.Text) && !string.IsNullOrEmpty(BookDes.Text))
+            {
+
+
+                var newBook = new BookGroup
+                {
+
+                    Name = BookName.Text,
+                    Description = BookDes.Text
+
+                };
+
+                _LibraryViewModel.AddBookGroupAsync(newBook);
+
+
+
+                ClearFields();
+
+
+
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin book group.");
+            }
+        }
+
+        private void BookShelfData_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (BookShelfData.SelectedItem is Bookshelf select)
+            {
+                ColumnNumberBookshelf.Text = select.ColumnNumber.ToString();
+                RowNumberBookshelf.Text = select.RowNumber.ToString();
+                ShelfNumberBookshelf.Text = select.ShelfNumber.ToString();
+            }
+        }
+
+        private void Add_Bookshelf(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ColumnNumberBookshelf.Text) && !string.IsNullOrEmpty(RowNumberBookshelf.Text) && !string.IsNullOrEmpty(ShelfNumberBookshelf.Text))
+            {
+
+
+                var newBookshelf = new Bookshelf
+                {
+
+                    ColumnNumber = Int32.Parse(ColumnNumberBookshelf.Text),
+                    RowNumber = Int32.Parse(RowNumberBookshelf.Text),
+                    ShelfNumber = Int32.Parse(ShelfNumberBookshelf.Text)
+
+                };
+
+                _LibraryViewModel.AddBookshelfAsync(newBookshelf);
+
+
+
+                ClearFields();
+
+
+
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin bookshelf.");
+            }
+        }
+
+        private void Update_Bookshelf(object sender, RoutedEventArgs e)
+        {
+            if (BookShelfData.SelectedItem is Bookshelf select)
+            {
+                select.ColumnNumber = Int32.Parse(ColumnNumberBookshelf.Text);
+                select.RowNumber = Int32.Parse(RowNumberBookshelf.Text);
+                select.ShelfNumber = Int32.Parse(ShelfNumberBookshelf.Text);
+
+                _LibraryViewModel.UpdateBookshelfAsync(select);
+                ClearFields();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần cập nhật.");
+            }
+        }
+
+        private void Delete_Bookshelf(object sender, RoutedEventArgs e)
+        {
+            if (BookShelfData.SelectedItem is Bookshelf select)
+            {
+
+                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa bookshelf này không?",
+                                               "Xác nhận xóa",
+                                               MessageBoxButton.YesNo,
+                                               MessageBoxImage.Warning);
+
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    _LibraryViewModel.DeleteBookshelfAsync(select.ShelfId);
+
+
+
+                    ClearFields();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn bookshelf cần xóa.");
+            }
+        }
     }
 }

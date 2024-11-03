@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfLibrary"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Staff" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="Staff" Height="500" Width="800" WindowStartupLocation="CenterScreen">
 
     <Grid>
         <materialDesign:Card
@@ -402,6 +402,145 @@ AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" SelectionCha
                             <Button Click="Delete_Pub"  Content="Delete" Command="{Binding DeleteCommand}" Width="100"/>
 
                         </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+Width="auto"
+Height="auto">
+                            <materialDesign:PackIcon
+  Width="24"
+  Height="24"
+  HorizontalAlignment="Center"
+  Kind="BookAdd" />
+                            <TextBlock
+  HorizontalAlignment="Center"
+  Text="Books" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel Margin="16">
+                        <TextBlock Margin="0,0,0,8"
+         Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+         Text="Book Groups" />
+                        <DataGrid Height="200px" IsReadOnly="True" ItemsSource="{Binding bookGroups}" SelectedItem="{Binding SelectedBookGroup}" 
+AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" SelectionChanged="BookGroupData_SelectionChanged" x:Name="BookGroupData">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#333" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Padding" Value="5" />
+                                    <Setter Property="BorderBrush" Value="White"/>
+                                    <Setter Property="BorderThickness" Value="0.5"/>
+                                </Style>
+
+
+
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding GroupId}" Width="*"/>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Height="160" Width="348" HorizontalAlignment="Left">
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Name" Margin="0,5,5,5" FontSize="18" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="BookName" Text="{Binding SelectedBookGroup.Name, UpdateSourceTrigger=PropertyChanged}" Width="348" HorizontalAlignment="Left"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Description" Margin="0,5,5,5" FontSize="18" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="BookDes" Text="{Binding SelectedBookGroup.Description, UpdateSourceTrigger=PropertyChanged}" 
+Width="348" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left" Height="31"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Height="169" Width="348" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,20">
+                                <Button Click="Add_BookGroup" Content="Add" Command="{Binding AddCommand}" Width="100" Margin="20,0,0,0"/>
+                                <Button Click="Update_BookGroup" Content="Update" Command="{Binding UpdateCommand}" Width="100" Margin="5,0,5,0"/>
+                                <Button Click="Delete_BookGroup"  Content="Delete" Command="{Binding DeleteCommand}" Width="100"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+Width="auto"
+Height="auto">
+                            <materialDesign:PackIcon
+  Width="24"
+  Height="24"
+  HorizontalAlignment="Center"
+  Kind="Bookshelf" />
+                            <TextBlock
+  HorizontalAlignment="Center"
+  Text="BookShelf" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel Margin="16">
+                        <TextBlock Margin="0,0,0,8"
+         Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+         Text="BookShelf" />
+                        <DataGrid Height="200px" IsReadOnly="True" ItemsSource="{Binding bookShelfs}" SelectedItem="{Binding SelectedBookshelf}" 
+AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" SelectionChanged="BookShelfData_SelectionChanged" x:Name="BookShelfData">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#333" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Padding" Value="5" />
+                                    <Setter Property="BorderBrush" Value="White"/>
+                                    <Setter Property="BorderThickness" Value="0.5"/>
+                                </Style>
+
+
+
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Id" Binding="{Binding ShelfId}" Width="*"/>
+                                <DataGridTextColumn Header="Column" Binding="{Binding ColumnNumber}" Width="*"/>
+                                <DataGridTextColumn Header="Row" Binding="{Binding RowNumber}" Width="*"/>
+                                <DataGridTextColumn Header="Shelf Number" Binding="{Binding ShelfNumber}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Height="auto" Width="348" HorizontalAlignment="Left">
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Column Number" Margin="0,5,5,5" FontSize="15" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="ColumnNumberBookshelf" Text="{Binding SelectedBookshelf.ColumnNumber, UpdateSourceTrigger=PropertyChanged}" 
+Width="348" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left" Height="31"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Row Number" Margin="0,5,5,5" FontSize="15" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="RowNumberBookshelf" Text="{Binding SelectedBookshelf.RowNumber, UpdateSourceTrigger=PropertyChanged}" 
+Width="348" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left" Height="31"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Shelf Number" Margin="0,5,5,5" FontSize="15" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="ShelfNumberBookshelf" Text="{Binding SelectedBookshelf.ShelfNumber, UpdateSourceTrigger=PropertyChanged}" 
+Width="348" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left" Height="31"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Height="169" Width="348" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,20">
+                                <Button Click="Add_Bookshelf" Content="Add" Command="{Binding AddCommand}" Width="100" Margin="20,0,0,0"/>
+                                <Button Click="Update_Bookshelf" Content="Update" Command="{Binding UpdateCommand}" Width="100" Margin="5,0,5,0"/>
+                                <Button Click="Delete_Bookshelf"  Content="Delete" Command="{Binding DeleteCommand}" Width="100"/>
+                            </StackPanel>
+                        </StackPanel>
+
                     </StackPanel>
                 </TabItem>
             </TabControl>

@@ -25,12 +25,19 @@ namespace WpfLibrary.ViewModel
         public ObservableCollection<Models.Staff> StaffMembers { get; set; } = new ObservableCollection<Models.Staff>();
         public ObservableCollection<Supplier> suppliers { get; set; } = new ObservableCollection<Supplier>();
 
+        public ObservableCollection<BookGroup> bookGroups { get; set; } = new ObservableCollection<BookGroup>();
+
+        public ObservableCollection<Bookshelf> bookShelfs { get; set; } = new ObservableCollection<Bookshelf>();
 
         public Models.Staff SelectedStaff { get; set; } = new Models.Staff();
         public Supplier SelectedSupplier { get; set; } = new Supplier();
         public Category SelectedCate { get; set; }
         public Publisher SelectedPub { get; set; }
         public Fee SelectedFee { get; set; }
+
+        public BookGroup SelectedBookGroup { get; set; }
+
+        public Bookshelf SelectedBookshelf { get; set; }
 
         public ICommand AddStaffCommand { get; }
         public ICommand UpdateStaffCommand { get; }
@@ -49,6 +56,8 @@ namespace WpfLibrary.ViewModel
             LoadPublisherAsync();
             LoadStaffAsync();
             LoadSupplierAsync();
+            LoadBookGroupsAsync();
+            LoadBookshelfAsync();
 
             //AttachJwtTokenToClient();
 
@@ -108,7 +117,31 @@ namespace WpfLibrary.ViewModel
             }
         }
 
+        public async Task LoadBookGroupsAsync()
+        {
+            var books = await _httpClient.GetFromJsonAsync<List<BookGroup>>("BookGroup");
+            if (books != null)
+            {
+                bookGroups.Clear();
+                foreach (var item in books)
+                {
+                    bookGroups.Add(item);
+                }
+            }
+        }
 
+        public async Task LoadBookshelfAsync()
+        {
+            var loadbookshelf = await _httpClient.GetFromJsonAsync<List<Bookshelf>>("Bookshelf");
+            if (loadbookshelf != null)
+            {
+                bookShelfs.Clear();
+                foreach (var item in loadbookshelf)
+                {
+                    bookShelfs.Add(item);
+                }
+            }
+        }
 
         public async Task LoadFeeAsync()
         {
@@ -349,7 +382,79 @@ namespace WpfLibrary.ViewModel
             }
         }
 
+        public async Task DeleteBookgroupAsync(int bookGroupId)
+        {
+            var respone = await _httpClient.DeleteAsync($"BookGroup/{bookGroupId}");
+            if (respone.IsSuccessStatusCode)
+            {
+                var bookgroup = bookGroups.FirstOrDefault(c => c.GroupId == bookGroupId);
+                if (bookgroup != null) bookGroups.Remove(bookgroup);
+            }
+        }
+        public async Task UpdateBookgroupAsync(BookGroup bookgroup)
+        {
+            var respone = await _httpClient.PutAsJsonAsync($"BookGroup/{bookgroup.GroupId}", bookgroup);
+            if (respone.IsSuccessStatusCode)
+            {
+                var index = bookGroups.IndexOf(bookGroups.First(c => c.GroupId == bookgroup.GroupId));
+                if (index >= 0) bookGroups[index] = bookgroup;
 
+                bookGroups.RemoveAt(index);
+                bookGroups.Insert(index, bookgroup);
+
+            }
+        }
+        public async Task AddBookGroupAsync(BookGroup bookGroup)
+        {
+            var response = await _httpClient.PostAsJsonAsync("BookGroup", bookGroup);
+            if (response.IsSuccessStatusCode)
+            {
+                bookGroups.Add(bookGroup);
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Lỗi khi thêm nhóm sách: {errorMessage}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public async Task AddBookshelfAsync(Bookshelf bookshelf)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Bookshelf", bookshelf);
+            if (response.IsSuccessStatusCode)
+            {
+                bookShelfs.Add(bookshelf);
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Lỗi khi thêm bookshelf: {errorMessage}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public async Task UpdateBookshelfAsync(Bookshelf bookshelf)
+        {
+            var respone = await _httpClient.PutAsJsonAsync($"Bookshelf/{bookshelf.ShelfId}", bookshelf);
+            if (respone.IsSuccessStatusCode)
+            {
+                var index = bookShelfs.IndexOf(bookShelfs.First(c => c.ShelfId == bookshelf.ShelfId));
+                if (index >= 0) bookShelfs[index] = bookshelf;
+
+                bookShelfs.RemoveAt(index);
+                bookShelfs.Insert(index, bookshelf);
+
+            }
+        }
+
+        public async Task DeleteBookshelfAsync(int bookshelfId)
+        {
+            var respone = await _httpClient.DeleteAsync($"Bookshelf/{bookshelfId}");
+            if (respone.IsSuccessStatusCode)
+            {
+                var bookshelf = bookShelfs.FirstOrDefault(c => c.ShelfId == bookshelfId);
+                if (bookshelf != null) bookShelfs.Remove(bookshelf);
+            }
+        }
 
     }
 }
