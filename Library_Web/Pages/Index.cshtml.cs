@@ -10,6 +10,8 @@ public class IndexModel : PageModel
     public IEnumerable<Book> book { get; set; }
     private readonly ILogger<IndexModel> _logger;
     private readonly HttpClient _httpClient;
+    [BindProperty]
+    public IEnumerable<Book> TopViewedBooks { get; set; }
 
     public List<int> FavoriteBookIds { get; set; } = new List<int>();
 
@@ -22,6 +24,7 @@ public class IndexModel : PageModel
     public async Task<IActionResult> OnGetAsync()
     {
         AttachJwtTokenToClient();
+        SetTopViewedBooks();
         await LoadBooksAsync();
         await LoadFavoriteBooksAsync();
         return Page();
@@ -35,6 +38,19 @@ public class IndexModel : PageModel
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
     }
+
+    private void SetTopViewedBooks()
+    {
+        if (book != null && book.Any())
+        {
+            TopViewedBooks = book.OrderByDescending(b => b.Views).Take(5);
+        }
+        else
+        {
+            TopViewedBooks = Enumerable.Empty<Book>();
+        }
+    }
+
 
     private async Task LoadBooksAsync()
     {
