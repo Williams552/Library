@@ -1,0 +1,65 @@
+﻿@page
+@model Library_Web.Pages.Members.FavoriteBookModel
+@{
+    ViewData["Title"] = "FavoriteBook";
+}
+
+
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Thư Viện FPT
+                </div>
+                <div class="card-body">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Lượt Xem</th>
+                                <th scope="col">Lượt Thích</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.item)
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-route-id="@item.BookId" asp-page="/Books/Detail" class="form-group mb-3 text-center">
+                                            <img src="@item.Book.ImageLink" alt="Book Image" style="width: 150px; height: 100px; object-fit: cover;">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a asp-route-id="@item.Book.BookId" asp-page="/Books/Detail" class="text-decoration-none">
+                                            @item.Book.Title
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a asp-route-id="" asp-page="" class="text-decoration-none">
+                                            @item.Book.Views
+                                        </a>
+                                    </td>
+                                    <td>@item.BookId</td>
+                                    <td>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <form method="post" asp-page="/Members/RemoveFavorite" asp-route-id="@item.Book.BookId" class="favorite-form">
+                                                <button type="submit" class="btn btn-danger">
+                                                    <span class="fa fa-heart text-outline-danger"></span>
+                                                    <span class="favorite-text">Bỏ thích</span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

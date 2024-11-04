@@ -30,7 +30,7 @@ namespace Library_Web.Pages.Members
         public async Task<IActionResult> OnPostAsync()
         {
             AttachJwtTokenToClient();
-            var response = await _httpClient.PostAsJsonAsync("http://localhost:5139/api/Member", member);
+            var response = await _httpClient.PostAsJsonAsync("http://localhost:5139/api/FavoriteBook/addFavorite", member);
             if (response.IsSuccessStatusCode)
             {
                 TempData["SuccessRegister"] = "Đăng kí thành công!";

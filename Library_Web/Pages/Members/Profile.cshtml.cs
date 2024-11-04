@@ -28,7 +28,7 @@ namespace Library_Web.Pages.Members
             if (string.IsNullOrEmpty(userId))
             {
                 _logger.LogError("User ID không có trong session.");
-                return RedirectToPage("/Members/Login"); // Điều hướng tới trang đăng nhập nếu không có userId
+                return RedirectToPage("/Members/Login");
             }
             var responseUrl = await _httpClient.GetAsync($"http://localhost:5139/api/Member/{userId}");
             if (responseUrl.IsSuccessStatusCode)

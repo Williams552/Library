@@ -27,32 +27,49 @@ namespace LibraryManagementAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserFavorites()
+        public async Task<IActionResult> GetUserFavorites(int userId)
         {
-            var favorites = await _favoritesListDao.GetFavoritesByUserIdAsync();
+            if (userId == 0)
+            {
+                return Unauthorized(new { message = "User not authenticated" });
+            }
+
+            var favorites = await _favoritesListDao.GetFavoritesByUserIdAsync(userId);
             return Ok(favorites);
         }
 
-        [HttpPost("addFavorite")]
-        public async Task<IActionResult> AddFavorite([FromBody] int bookId)
+        [HttpPost("add/{bookId}")]
+        public async Task<IActionResult> AddFavorite(int bookId, int userId)
         {
-            var result = await _favoritesListDao.AddFavoriteAsync(bookId);
+            //int userId = GetUserId();
+            var result = await _favoritesListDao.AddFavoriteAsync(bookId, userId);
             if (result)
             {
                 return Ok(new { message = "Book added to favorites successfully." });
             }
-            return BadRequest(new { message = "Book is already in favorites or user not authenticated." });
+            return BadRequest(new { message = "Book is already in favorites or does not exist." });
         }
 
-        [HttpPost("removeFavorite")]
-        public async Task<IActionResult> RemoveFavorite([FromBody] int bookId)
+
+        [HttpDelete("remove/{bookId}")]
+        public async Task<IActionResult> RemoveFavorite(int bookId, int userId)
         {
-            var result = await _favoritesListDao.RemoveFavoriteAsync(bookId);
+            var result = await _favoritesListDao.RemoveFavoriteAsync(bookId, userId);
             if (result)
             {
                 return Ok(new { message = "Book removed from favorites successfully." });
             }
             return BadRequest(new { message = "Failed to remove book from favorites or book was not in favorites." });
+        }
+
+        private int GetUserId()
+        {
+            var userIdClaim = User.FindFirst("userID");
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return userId;
+            }
+            return 0;
         }
 
     }

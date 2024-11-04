@@ -9,6 +9,7 @@ using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Net;
+using Microsoft.Extensions.Logging;
 
 namespace DataAccess.DAOs
 {
@@ -16,17 +17,19 @@ namespace DataAccess.DAOs
     {
         public FavoritesListDAO() { }
         private readonly JwtTokenService _jwtTokenService;
+        private readonly ILogger<FavoritesListDAO> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public FavoritesListDAO(JwtTokenService jwtTokenService, IHttpContextAccessor httpContextAccessor)
+        public FavoritesListDAO(JwtTokenService jwtTokenService, IHttpContextAccessor httpContextAccessor, ILogger<FavoritesListDAO> logger)
         {
+            _logger = logger;
             _jwtTokenService = jwtTokenService;
             _httpContextAccessor = httpContextAccessor;
         }
 
         private int GetUserId()
         {
-            var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst("userID");
             if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
             {
                 return userId;
@@ -43,26 +46,36 @@ namespace DataAccess.DAOs
         }
 
         // lay sach yeu thich theo id 
-        public async Task<IEnumerable<FavoritesList>> GetFavoritesByUserIdAsync()
+        public async Task<IEnumerable<FavoritesList>> GetFavoritesByUserIdAsync(int id)
         {
             return await _context.FavoritesLists
-                .Where(f => f.UserId == GetUserId() && !f.IsDeleted)
+                .Where(f => f.UserId == id && !f.IsDeleted)
                 .Include(f => f.Book) // Bao gồm thông tin sách
                 .ToListAsync();
         }
 
         // Thêm sách vào danh sách yêu thích của người dùng
-        public async Task<bool> AddFavoriteAsync(int bookId)
+        public async Task<bool> AddFavoriteAsync(int bookId, int userId)
         {
-            int userId = GetUserId();
+            // Kiểm tra sự tồn tại của bookId trong bảng Books
+            var bookExists = await _context.Books.AnyAsync(b => b.BookId == bookId);
+            if (!bookExists)
+            {
+                // Nếu bookId không tồn tại, log cảnh báo và trả về false
+                _logger.LogWarning($"Book with ID {bookId} does not exist.");
+                return false;
+            }
+
+            // Kiểm tra xem sách đã có trong danh sách yêu thích chưa
             var existingFavorite = await _context.FavoritesLists
                 .FirstOrDefaultAsync(f => f.UserId == userId && f.BookId == bookId);
+
             if (existingFavorite == null)
             {
                 var favorite = new FavoritesList
                 {
-                    UserId = userId,
                     BookId = bookId,
+                    UserId = userId,
                     CreatedAt = DateTime.Now,
                     IsDeleted = false
                 };
@@ -74,9 +87,9 @@ namespace DataAccess.DAOs
             return false;
         }
 
-        public async Task<bool> RemoveFavoriteAsync(int bookId)
+
+        public async Task<bool> RemoveFavoriteAsync(int bookId, int userId)
         {
-            int userId = GetUserId();
             var existingFavorite = await _context.FavoritesLists
                 .FirstOrDefaultAsync(f => f.UserId == userId && f.BookId == bookId);
 

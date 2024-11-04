@@ -14,27 +14,7 @@
     <header>
         <nav class="navbar navbar-expand-md navbar-dark sticky-top bg-dark">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Home</a>Nền tảng</a>
-                <div class="navbar-collapse collapse" id="navbarCollapse">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Index">Thể Loại</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                    </ul>
-                </div>
-                <form class="form-inline mt-2 mt-md-0" method="get" action="pages/search.html">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Tìm kiếm" aria-label="Search"
-                           name="keyword_tensanpham">
-                </form>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Trang chủ</a>Trang chủ</a>
                 <ul class="navbar-nav px-3">
                     <li class="nav-item text-nowrap">
                         <a class="nav-link" href="pages/cart.html">Nạp Tiền</a>
@@ -53,7 +33,7 @@
                                         <a class="dropdown-item" asp-area="" asp-page="/Members/Profile">Thông tin</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="OrderHistory">Sách yêu thích</a>
+                                        <a class="dropdown-item" asp-area="" asp-page="/Members/FavoriteBook">Sách yêu thích</a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="ChangePassword">Đổi mật khẩu</a>
@@ -82,15 +62,19 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    @* <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - Library_Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
-    </footer>
+    </footer> *@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/scripts.js" asp-append-version="true"></script>
+    <script src="~/js/datatables-demo.js" asp-append-version="true"></script>
+    <script src="~/js/datatables-simple-demo.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
 
