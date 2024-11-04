@@ -46,16 +46,16 @@ namespace LibraryManagementAPI.Controllers
         public async Task<ActionResult> createBook(Book item)
         {
             await _repository.createBook(item);
-            return CreatedAtAction(nameof(findBookById), new { id = item.AuthorId }, item);
+            return CreatedAtAction(nameof(findBookById), new { id = item.BookId }, item);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> updateBook(int id, Book item)
         {
-            if (id != item.AuthorId)
-            {
-                return BadRequest();
-            }
+            //if (id != item.B)
+            //{
+            //    return BadRequest();
+            //}
             await _repository.updateBook(item);
             return Ok();
         }

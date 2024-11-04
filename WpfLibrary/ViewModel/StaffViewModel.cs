@@ -51,7 +51,7 @@ namespace WpfLibrary.ViewModel
 };
             var content = new FormUrlEncodedContent(parameters);
 
-            var response = await _httpClient.PostAsync($"https://localhost:7143/api/Staff/checkLogin?username={Username}&password={Password}", content);
+            var response = await _httpClient.PostAsync($"http://localhost:5139/api/Staff/checkLogin?username={Username}&password={Password}", content);
 
             if (response.IsSuccessStatusCode)
             {
