@@ -19,15 +19,25 @@ namespace WpfLibrary.ViewModel
         public ObservableCollection<Category> Cate { get; set; } = new ObservableCollection<Category>();
 
         public ObservableCollection<Publisher> Pub { get; set; } = new ObservableCollection<Publisher>();
-
+        public ObservableCollection<Author> authors { get; set; } = new ObservableCollection<Author>();
         public ObservableCollection<Fee> fee { get; set; } = new ObservableCollection<Fee>();
-
         public ObservableCollection<Models.Staff> StaffMembers { get; set; } = new ObservableCollection<Models.Staff>();
         public ObservableCollection<Supplier> suppliers { get; set; } = new ObservableCollection<Supplier>();
 
         public ObservableCollection<BookGroup> bookGroups { get; set; } = new ObservableCollection<BookGroup>();
 
         public ObservableCollection<Bookshelf> bookShelfs { get; set; } = new ObservableCollection<Bookshelf>();
+
+
+        public ObservableCollection<Loan> loans { get; set; } = new ObservableCollection<Loan>();
+
+
+        public ObservableCollection<Book> book { get; set; } = new ObservableCollection<Book>();
+        public ObservableCollection<Member> members { get; set; } = new ObservableCollection<Member>();
+
+
+        public Member SelectedMember { get; set; }
+        public Book SelectedBook { get; set; }
 
         public Models.Staff SelectedStaff { get; set; } = new Models.Staff();
         public Supplier SelectedSupplier { get; set; } = new Supplier();
@@ -38,6 +48,9 @@ namespace WpfLibrary.ViewModel
         public BookGroup SelectedBookGroup { get; set; }
 
         public Bookshelf SelectedBookshelf { get; set; }
+
+        public Loan SelectedLoan { get; set; }
+        public Author SelectedAuthor { get; set; }
 
         public ICommand AddStaffCommand { get; }
         public ICommand UpdateStaffCommand { get; }
@@ -50,15 +63,18 @@ namespace WpfLibrary.ViewModel
         public LibraryViewModel()
         {
             _httpClient = new HttpClient(); // Chỉ khởi tạo một lần
-            _httpClient.BaseAddress = new Uri("https://localhost:7143/api/"); // Đặt URL cơ sở cho tất cả các API
+            _httpClient.BaseAddress = new Uri("http://localhost:5139/api/"); // Đặt URL cơ sở cho tất cả các API
             LoadCategoriesAsync();
             LoadFeeAsync();
             LoadPublisherAsync();
             LoadStaffAsync();
+            LoadAuthorAsync();
             LoadSupplierAsync();
             LoadBookGroupsAsync();
             LoadBookshelfAsync();
-
+            LoadLoanAsync();
+            LoadBookAsync();
+            LoadMember();
             //AttachJwtTokenToClient();
 
             AddStaffCommand = new RelayCommand(async (staff) => await AddStaffAsync((Models.Staff)staff));
@@ -67,6 +83,44 @@ namespace WpfLibrary.ViewModel
 
             AddSupplierCommand = new RelayCommand(async (supplier) => await AddSupplierAsync((Supplier)supplier));
             UpdateSupplierCommand = new RelayCommand(async (supplier) => await UpdateSupplierAsync((Supplier)supplier));
+        }
+
+        public async Task LoadMember()
+        {
+            var memberList = await _httpClient.GetFromJsonAsync<List<Member>>("Member");
+            if(memberList != null)
+            {
+                members.Clear();
+                foreach (var member in memberList)
+                {
+                    members.Add(member);
+                }    
+            }    
+        }
+
+        public async Task LoadLoanAsync()
+        {
+            var loanList = await _httpClient.GetFromJsonAsync<List<Loan>>("Loan");
+            if (loanList != null)
+            {
+                loans.Clear();
+                foreach (var loan in loanList)
+                {
+                    loans.Add(loan);
+                }
+            }
+        }
+        public async Task LoadAuthorAsync()
+        {
+            var authorList = await _httpClient.GetFromJsonAsync<List<Author>>("Authors");
+            if (authorList != null)
+            {
+                authors.Clear();
+                foreach (var author in authorList)
+                {
+                    authors.Add(author);
+                }
+            }
         }
 
         private bool CanDelete(object? arg)
@@ -155,12 +209,85 @@ namespace WpfLibrary.ViewModel
                 }
             }
         }
-        
+
+        public async Task LoadBookAsync()
+        {
+            var viewbook = await _httpClient.GetFromJsonAsync<List<Book>>("Book");
+            if (viewbook != null)
+            {
+                book.Clear();
+                foreach (var item in viewbook)
+                {
+                    book.Add(item);
+                }
+            }
+        }
+
+        public async Task LoadPublisherAsync()
+        {
+            var publisher = await _httpClient.GetFromJsonAsync<List<Publisher>>("Publisher");
+            if (publisher != null)
+            {
+                Pub.Clear();
+                foreach (var pub in publisher)
+                {
+                    Pub.Add(pub);
+                }
+            }
+        }
+
+
+
+        //--------------------------------------------------Book-------------------------------------------------
+
+
+
+        public async Task AddBookAsync(Book newBook)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Book", newBook);
+            if (response.IsSuccessStatusCode)
+            {
+                var addedBook = await response.Content.ReadFromJsonAsync<Book>();
+                if (addedBook != null) book.Add(addedBook); // Add to local collection
+            }
+            else
+            {
+                MessageBox.Show("Lỗi khi thêm sách mới.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        public async Task UpdateBookAsync(Book updatedBook)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"Book/{updatedBook.BookId}", updatedBook);
+            if (response.IsSuccessStatusCode)
+            {
+                var index = book.IndexOf(book.FirstOrDefault(b => b.BookId == updatedBook.BookId));
+                if (index >= 0) book[index] = updatedBook; // Update local collection
+            }
+            else
+            {
+                MessageBox.Show("Lỗi khi cập nhật sách.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public async Task DeleteBookAsync(int bookId)
+        {
+            var respone = await _httpClient.DeleteAsync($"Book/{bookId}");
+            if (respone.IsSuccessStatusCode)
+            {
+                var dlbook = book.FirstOrDefault(c => c.BookId == bookId);
+                if (dlbook != null) book.Remove(dlbook);
+            }
+        }
+
         public bool checkname(string name)
         {
             
             return Cate.Any(c => c.CategoryCode.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
+
+
+
+        //--------------------------------------------------Cate-------------------------------------------------
 
 
         public async Task AddCategoryAsync(Category category)
@@ -210,7 +337,12 @@ namespace WpfLibrary.ViewModel
             }
         }
 
-        //fee
+
+
+        //--------------------------------------------------Fee-------------------------------------------------
+
+
+
         public async Task AddFeeAsync(Fee fe)
         {
             var response = await _httpClient.PostAsJsonAsync("Fee", fe);
@@ -245,18 +377,12 @@ namespace WpfLibrary.ViewModel
         }
 
         //load Publisher
-        public async Task LoadPublisherAsync()
-        {
-            var publisher = await _httpClient.GetFromJsonAsync<List<Publisher>>("Publisher");
-            if (publisher != null)
-            {
-                Pub.Clear();
-                foreach (var pub in publisher)
-                {
-                    Pub.Add(pub);
-                }
-            }
-        }
+        
+
+
+
+        //--------------------------------------------------Pub-------------------------------------------------
+
 
         public async Task AddPub(Publisher _pub)
         {
@@ -298,6 +424,10 @@ namespace WpfLibrary.ViewModel
                 if (pub != null) Pub.Remove(pub);
             }
         }
+
+
+
+        //--------------------------------------------------Staff-------------------------------------------------
 
 
         public async Task AddStaffAsync(Models.Staff staff)
@@ -342,6 +472,9 @@ namespace WpfLibrary.ViewModel
 
 
 
+        //--------------------------------------------------Supplier-------------------------------------------------
+
+
         public async Task AddSupplierAsync(Supplier supplier)
         {
             var response = await _httpClient.PostAsJsonAsync("Supplier", supplier);
@@ -382,6 +515,11 @@ namespace WpfLibrary.ViewModel
             }
         }
 
+
+
+        //--------------------------------------------------BookGroup-------------------------------------------------
+
+
         public async Task DeleteBookgroupAsync(int bookGroupId)
         {
             var respone = await _httpClient.DeleteAsync($"BookGroup/{bookGroupId}");
@@ -418,6 +556,12 @@ namespace WpfLibrary.ViewModel
             }
         }
 
+
+
+        //--------------------------------------------------Bookshelf-------------------------------------------------
+
+
+
         public async Task AddBookshelfAsync(Bookshelf bookshelf)
         {
             var response = await _httpClient.PostAsJsonAsync("Bookshelf", bookshelf);
@@ -453,6 +597,124 @@ namespace WpfLibrary.ViewModel
             {
                 var bookshelf = bookShelfs.FirstOrDefault(c => c.ShelfId == bookshelfId);
                 if (bookshelf != null) bookShelfs.Remove(bookshelf);
+            }
+        }
+
+
+        //--------------------------------------------------Loan-------------------------------------------------
+
+
+        public async Task AddLoanAsync(Loan loan)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Loan", loan);
+            if (response.IsSuccessStatusCode)
+            {
+                loans.Add(loan);
+                SelectedLoan = new Loan();
+            }
+        }
+
+        public async Task UpdateLoanAsync(Loan loan)
+        {
+            if (loan != null)
+            {
+                var response = await _httpClient.PutAsJsonAsync($"Loan/{loan.LoanId}", loan);
+                if (response.IsSuccessStatusCode)
+                {
+                    var index = loans.IndexOf(loans.First(s => s.LoanId == loan.LoanId));
+                    if (index >= 0)
+                    {
+                        loans[index] = loan;
+                    }
+                }
+            }
+        }
+
+
+        //--------------------------------------------------Author-------------------------------------------------
+
+
+        public async Task AddAuthorAsync(Author author)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Authors", author);
+            if (response.IsSuccessStatusCode)
+            {
+                authors.Add(author);
+                SelectedAuthor = new Author();
+            }
+        }
+
+        public async Task UpdateAuthorAsync(Author author)
+        {
+            if (author != null)
+            {
+                var response = await _httpClient.PutAsJsonAsync($"Authors/{author.AuthorId}", author);
+                if (response.IsSuccessStatusCode)
+                {
+                    var index = authors.IndexOf(authors.First(s => s.AuthorId == author.AuthorId));
+                    if (index >= 0)
+                    {
+                        authors[index] = author;
+                    }
+                }
+            }
+        }
+
+        public async Task DeleteAuthorAsync(int authorid)
+        {
+            var response = await _httpClient.DeleteAsync($"Authors/{authorid}");
+            if (response.IsSuccessStatusCode)
+            {
+                var author = authors.FirstOrDefault(s => s.AuthorId == authorid);
+                if (author != null)
+                {
+                    authors.Remove(author);
+                    SelectedAuthor = new Author();
+                }
+            }
+        }
+
+
+        //--------------------------------------------------Member-------------------------------------------------
+
+
+        public async Task AddMemberAsync(Member member)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Member", member);
+            if (response.IsSuccessStatusCode)
+            {
+                members.Add(member);
+                SelectedMember = new Member();
+            }
+        }
+
+        public async Task UpdateMemberAsync(Member member)
+        {
+            if (member != null)
+            {
+                var response = await _httpClient.PutAsJsonAsync($"Member/{member.MemberId}", member);
+                if (response.IsSuccessStatusCode)
+                {
+                    var index = members.IndexOf(members.First(s => s.MemberId == member.MemberId));
+                    if (index >= 0)
+                    {
+                        members[index] = member;
+                    }
+                }
+            }
+        }
+
+        public async Task DeleteMemberAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"Member/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var member = members.FirstOrDefault(s => s.MemberId == id);
+                if (member != null)
+                {
+                    members.Remove(member);
+                    SelectedMember = new Member();
+                }
             }
         }
 

@@ -41,6 +41,12 @@ namespace WpfLibrary
         {
         }
 
+
+
+        //--------------------------------------------------Staff-------------------------------------------------
+
+
+
         private void myDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (myDataGrid.SelectedItem is Models.Staff selectedStaff)
@@ -131,6 +137,12 @@ namespace WpfLibrary
             }
         }
 
+
+
+
+
+
+
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             txtStaffid.Clear();
@@ -157,6 +169,33 @@ namespace WpfLibrary
             txtContactInfo.Clear();
 
         }
+
+        private void ClearFieldsAuthor()
+        {
+            txtFullNameAuthor.Clear();
+            txtBiography.Clear();
+            txtAvartar.Clear();
+
+        }
+
+        private void ClearFieldsLoan()
+        {
+            txtUserId.Clear();
+            txtCopyId.Clear();
+            dpLoanDate.SelectedDate = null;
+            dpReturnDate.SelectedDate = null;
+            dpDueDate.SelectedDate = null;
+            txtFine.Clear();
+            txtBorrowFee.Clear();
+            txtStatus.Clear();
+
+        }
+
+
+
+        //--------------------------------------------------Supplier-------------------------------------------------
+
+
 
         private void myDataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
@@ -243,6 +282,14 @@ namespace WpfLibrary
             txtContactInfo.Clear();
         }
 
+
+
+
+        //--------------------------------------------------Cate-------------------------------------------------
+
+
+
+
         private void mydata_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (mydata.SelectedItem is Category selectedCategory)
@@ -322,6 +369,13 @@ namespace WpfLibrary
                 MessageBox.Show("Vui lòng chọn danh mục cần xóa.");
             }
         }
+
+
+
+
+        //--------------------------------------------------Fee-------------------------------------------------
+
+
 
 
         private void mydata1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -418,6 +472,14 @@ namespace WpfLibrary
             txtDiscription.Clear();
         }
 
+
+
+
+        //--------------------------------------------------Publiser-------------------------------------------------
+
+
+
+
         private void mydata2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (mydata2.SelectedItem is Publisher select)
@@ -504,6 +566,13 @@ namespace WpfLibrary
 
         }
 
+
+
+
+        //--------------------------------------------------BookGroup-------------------------------------------------
+
+
+
         private void BookGroupData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (BookGroupData.SelectedItem is BookGroup select)
@@ -583,6 +652,13 @@ namespace WpfLibrary
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin book group.");
             }
         }
+
+
+
+
+        //--------------------------------------------------BookShelf-------------------------------------------------
+
+
 
         private void BookShelfData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -666,5 +742,466 @@ namespace WpfLibrary
                 MessageBox.Show("Vui lòng chọn bookshelf cần xóa.");
             }
         }
+
+
+
+
+        //--------------------------------------------------Loan-------------------------------------------------
+
+
+
+
+        private void myDataGrid_SelectionChanged_2(object sender, SelectionChangedEventArgs e)
+        {
+            if (myLoan.SelectedItem is Loan selectedLoan)
+            {
+                // Cập nhật các trường nhập liệu với thông tin của danh mục đã chọn
+                txtUserId.Text = selectedLoan.UserId.ToString();
+                txtCopyId.Text = selectedLoan.CopyId.ToString();
+                dpLoanDate.SelectedDate = selectedLoan.LoanDate;
+                dpReturnDate.SelectedDate = selectedLoan.ReturnDate;
+                dpDueDate.SelectedDate = selectedLoan.DueDate;
+                txtFine.Text = selectedLoan.Fine.ToString();
+                txtBorrowFee.Text = selectedLoan.BorrowFee.ToString();
+                txtStatus.Text = selectedLoan.Status;
+            }
+        }
+
+
+        private void AddLoan_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtUserId.Text) &&
+        !string.IsNullOrEmpty(txtCopyId.Text) &&
+        dpLoanDate.SelectedDate.HasValue &&
+        dpReturnDate.SelectedDate.HasValue &&
+        dpDueDate.SelectedDate.HasValue &&
+        !string.IsNullOrEmpty(txtFine.Text) &&
+        !string.IsNullOrEmpty(txtBorrowFee.Text) &&
+        !string.IsNullOrEmpty(txtStatus.Text))
+            {
+
+
+                var newLoan = new Loan
+                {
+
+                    UserId = Int32.Parse(txtUserId.Text),
+                    CopyId = Int32.Parse(txtCopyId.Text),
+                    LoanDate = dpLoanDate.SelectedDate.Value,
+                    ReturnDate = dpReturnDate.SelectedDate.Value,
+                    DueDate = dpDueDate.SelectedDate.Value,
+                    Fine = decimal.Parse(txtFine.Text),
+                    BorrowFee = decimal.Parse(txtBorrowFee.Text),
+                    Status = txtStatus.Text
+                };
+
+                _LibraryViewModel.AddLoanAsync(newLoan);
+
+
+
+                ClearFieldsLoan();
+
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin danh mục.");
+            }
+        }
+
+        private void UpdateLoan_Click(object sender, RoutedEventArgs e)
+        {
+            if (myLoan.SelectedItem is Loan selectedLoan)
+            {
+                selectedLoan.UserId = Int32.Parse(txtUserId.Text);
+                selectedLoan.CopyId = Int32.Parse(txtCopyId.Text);
+                selectedLoan.LoanDate = dpLoanDate.SelectedDate.Value;
+                selectedLoan.ReturnDate = dpReturnDate.SelectedDate.Value;
+                selectedLoan.DueDate = dpDueDate.SelectedDate.Value;
+                selectedLoan.Fine = decimal.Parse(txtFine.Text);
+                selectedLoan.BorrowFee = decimal.Parse(txtBorrowFee.Text);
+                selectedLoan.Status = txtStatus.Text;
+
+
+
+
+                _LibraryViewModel.UpdateLoanAsync(selectedLoan);
+                ClearFieldsLoan();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần cập nhật.");
+            }
+        }
+
+        private void ClearLoan_Click(object sender, RoutedEventArgs e)
+        {
+            txtUserId.Clear();
+            txtCopyId.Clear();
+            dpLoanDate.SelectedDate = null;
+            dpReturnDate.SelectedDate = null;
+            dpDueDate.SelectedDate = null;
+            txtFine.Clear();
+            txtBorrowFee.Clear();
+            txtStatus.Clear();
+        }
+
+
+
+
+        //--------------------------------------------------Book-------------------------------------------------
+
+
+        private void BookData_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (BookData.SelectedItem is Book select)
+            {
+                TitleTextBox.Text = select.Title;
+                DescriptionTextBox.Text = select.Description;
+                PublishYearTextBox.Text = select.PublishYear?.ToString() ?? string.Empty;
+                MaxCopiesPerShelfTextBox.Text = select.MaxCopiesPerShelf?.ToString() ?? string.Empty;
+                //AuthorComboBox.SelectedValue = select.AuthorId;
+                bookauthor.Text = select.AuthorId.ToString();
+                CategoryComboBox.SelectedValue = select.CategoryId;
+                SupplierComboBox.SelectedValue = select.SupplierId;
+                PublisherComboBox.SelectedValue = select.PublisherId;
+                PriceTextBox.Text = select.Price?.ToString("F2") ?? string.Empty;
+                AvailableCopiesTextBox.Text = select.AvailableCopies?.ToString() ?? string.Empty;
+                WarehouseCheckBox.IsChecked = select.Warehouse;
+                PdfLinkTextBox.Text = select.PdfLink;
+                ImageLinkTextBox.Text = select.ImageLink;
+                DamageFeeTextBox.Text = select.DamageFee?.ToString("F2") ?? string.Empty;
+            }
+        }
+
+        private void Add_Book(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TitleTextBox.Text) &&
+                !string.IsNullOrEmpty(PublishYearTextBox.Text) &&
+                !string.IsNullOrEmpty(PriceTextBox.Text) &&
+                !string.IsNullOrEmpty(bookauthor.Text) &&
+                //AuthorComboBox.SelectedValue != null &&
+                CategoryComboBox.SelectedValue != null &&
+                SupplierComboBox.SelectedValue != null &&
+                PublisherComboBox.SelectedValue != null)
+            {
+
+
+                var newBook = new Book
+                {
+
+                    Title = TitleTextBox.Text,
+                    Description = DescriptionTextBox.Text,
+                    PublishYear = int.TryParse(PublishYearTextBox.Text, out int publishYear) ? publishYear : (int?)null,
+                    MaxCopiesPerShelf = int.TryParse(MaxCopiesPerShelfTextBox.Text, out int maxCopies) ? maxCopies : (int?)null,
+                    //AuthorId = (int)AuthorComboBox.SelectedValue,
+                    AuthorId = Int32.Parse(bookauthor.Text),
+                    CategoryId = (int)CategoryComboBox.SelectedValue,
+                    SupplierId = (int)SupplierComboBox.SelectedValue,
+                    PublisherId = (int)PublisherComboBox.SelectedValue,
+                    Price = decimal.TryParse(PriceTextBox.Text, out decimal price) ? price : (decimal?)null,
+                    DamageFee = decimal.TryParse(DamageFeeTextBox.Text, out decimal damageFee) ? damageFee : (decimal?)null,
+                    AvailableCopies = int.TryParse(AvailableCopiesTextBox.Text, out int availableCopies) ? availableCopies : (int?)null,
+                    PdfLink = PdfLinkTextBox.Text,
+                    ImageLink = ImageLinkTextBox.Text,
+                    Warehouse = WarehouseCheckBox.IsChecked
+                };
+
+                // Add the new book through the ViewModel
+                 _LibraryViewModel.AddBookAsync(newBook);
+
+                // Clear input fields
+                ClearFields();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin sách.");
+            }
+        }
+
+        private void Update_Book(object sender, RoutedEventArgs e)
+        {
+            if (BookData.SelectedItem is Book select)
+            {
+                select.Title = TitleTextBox.Text;
+                select.Description = DescriptionTextBox.Text;
+                select.PublishYear = int.TryParse(PublishYearTextBox.Text, out int publishYear) ? publishYear : (int?)null;
+                select.MaxCopiesPerShelf = int.TryParse(MaxCopiesPerShelfTextBox.Text, out int maxCopies) ? maxCopies : (int?)null;
+                select.AuthorId = Int32.Parse(bookauthor.Text);
+                //select.AuthorId = AuthorComboBox.SelectedValue is int authorId ? authorId : select.AuthorId;
+                select.CategoryId = CategoryComboBox.SelectedValue is int categoryId ? categoryId : select.CategoryId;
+                select.SupplierId = SupplierComboBox.SelectedValue is int supplierId ? supplierId : select.SupplierId;
+                select.PublisherId = PublisherComboBox.SelectedValue is int publisherId ? publisherId : select.PublisherId;
+                select.Price = decimal.TryParse(PriceTextBox.Text, out decimal price) ? price : select.Price;
+                select.DamageFee = decimal.TryParse(DamageFeeTextBox.Text, out decimal damageFee) ? damageFee : select.DamageFee;
+                select.AvailableCopies = int.TryParse(AvailableCopiesTextBox.Text, out int availableCopies) ? availableCopies : select.AvailableCopies;
+                select.PdfLink = ImageLinkTextBox.Text;
+                select.ImageLink = ImageLinkTextBox.Text;
+                select.Warehouse = WarehouseCheckBox.IsChecked;
+
+                _LibraryViewModel.UpdateBookAsync(select);
+                ClearFields();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần cập nhật.");
+            }
+        }
+
+        private void Delete_Book(object sender, RoutedEventArgs e)
+        {
+            if (BookData.SelectedItem is Book select)
+            {
+
+                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa sách này không?",
+                                               "Xác nhận xóa",
+                                               MessageBoxButton.YesNo,
+                                               MessageBoxImage.Warning);
+
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    _LibraryViewModel.DeleteBookAsync(select.BookId);
+
+
+
+                    ClearFields();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn sách cần xóa.");
+            }
+        }
+
+
+
+
+        //--------------------------------------------------Author-------------------------------------------------
+
+
+
+        private void AddAuthor_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtFullNameAuthor.Text) && !string.IsNullOrEmpty(txtBiography.Text) && !string.IsNullOrEmpty(txtAvartar.Text))
+            {
+
+
+                var newAuthor = new Author
+                {
+
+                    FullName = txtFullNameAuthor.Text,
+                    Biography = txtBiography.Text,
+                    Avartar = txtAvartar.Text
+                };
+
+                _LibraryViewModel.AddAuthorAsync(newAuthor);
+
+
+
+                ClearFieldsAuthor();
+
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin danh mục.");
+            }
+        }
+
+        private void UpdateAuthor_Click(object sender, RoutedEventArgs e)
+        {
+            if (myAuthor.SelectedItem is Author selectedAuthor)
+            {
+                //selectedStaff.StaffId = Int32.Parse(txtStaffid.Text);
+                selectedAuthor.FullName = txtFullNameAuthor.Text;
+                selectedAuthor.Biography = txtBiography.Text;
+                selectedAuthor.Avartar = txtAvartar.Text;
+
+
+
+
+                _LibraryViewModel.UpdateAuthorAsync(selectedAuthor);
+                ClearFieldsAuthor();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần cập nhật.");
+            }
+        }
+
+        private void DeleteAuthor_Click(object sender, RoutedEventArgs e)
+        {
+            if (myAuthor.SelectedItem is Author selectedAuthor)
+            {
+                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa Author này không?",
+                                              "Xác nhận xóa",
+                                              MessageBoxButton.YesNo,
+                                              MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _LibraryViewModel.DeleteAuthorAsync(selectedAuthor.AuthorId);
+
+
+
+                    ClearFieldsAuthor();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần xóa.");
+            }
+        }
+
+        private void ClearAuthor_Click(object sender, RoutedEventArgs e)
+        {
+            txtFullNameAuthor.Clear();
+            txtBiography.Clear();
+            txtAvartar.Clear();
+        }
+
+
+        private void myAuthor_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (myAuthor.SelectedItem is Author selectedAuthor)
+            {
+                // Cập nhật các trường nhập liệu với thông tin của danh mục đã chọn
+                txtFullNameAuthor.Text = selectedAuthor.FullName;
+                txtBiography.Text = selectedAuthor.Biography;
+                txtAvartar.Text = selectedAuthor.Avartar;
+            }
+            }
+
+
+
+
+
+        //--------------------------------------------------Member-------------------------------------------------
+
+
+        private void myMember_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (myMember.SelectedItem is Member selectedMember)
+            {
+                // Cập nhật các trường nhập liệu với thông tin của danh mục đã chọn
+                txtMemberFullName.Text = selectedMember.FullName;
+                dpDateOfBirth.SelectedDate = selectedMember.DateOfBirth.ToDateTime(TimeOnly.MinValue);
+                txtGender.Text = selectedMember.Gender;
+                txtMemberEmail.Text = selectedMember.Email;
+                txtPhoneNumber.Text = selectedMember.PhoneNumber;
+                txtAddress.Text = selectedMember.Address;
+                txtMemberUsername.Text = selectedMember.Username;
+                txtMemberPassword.Text = selectedMember.Password;
+                txtIdCardNumber.Text = selectedMember.IdCardNumber;
+            }
+        }
+
+
+        private void AddMember_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtMemberFullName.Text) && dpDateOfBirth.SelectedDate.HasValue && !string.IsNullOrEmpty(txtGender.Text) && !string.IsNullOrEmpty(txtMemberEmail.Text) && !string.IsNullOrEmpty(txtPhoneNumber.Text) && !string.IsNullOrEmpty(txtAddress.Text) && !string.IsNullOrEmpty(txtMemberUsername.Text) && !string.IsNullOrEmpty(txtMemberPassword.Text) && !string.IsNullOrEmpty(txtIdCardNumber.Text))
+            {
+
+
+                var newMember = new Member
+                {
+
+                    FullName = txtMemberFullName.Text,
+                    DateOfBirth = DateOnly.FromDateTime(dpDateOfBirth.SelectedDate.Value),
+                    Gender = txtGender.Text,
+                    Email = txtMemberEmail.Text,
+                    PhoneNumber = txtPhoneNumber.Text,
+                    Address = txtAddress.Text,
+                    Username = txtMemberUsername.Text,
+                    Password = txtMemberPassword.Text,  
+                    IdCardNumber = txtIdCardNumber.Text,
+
+                };
+
+                _LibraryViewModel.AddMemberAsync(newMember);
+
+
+
+                ClearFieldsMember();
+
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin danh mục.");
+            }
+        }
+
+        private void ClearFieldsMember()
+        {
+            txtMemberFullName.Clear();
+            dpDateOfBirth.SelectedDate = null;
+            txtGender.Clear();
+            txtMemberEmail.Clear();
+            txtPhoneNumber.Clear();
+            txtAddress.Clear();
+            txtMemberUsername.Clear();
+            txtMemberPassword.Clear();
+            txtIdCardNumber.Clear();
+        }
+
+        private void UpdateMember_Click(object sender, RoutedEventArgs e)
+        {
+            if (myMember.SelectedItem is Member selectedMember)
+            {
+                selectedMember.FullName = txtMemberFullName.Text;
+                selectedMember.DateOfBirth = DateOnly.FromDateTime(dpDateOfBirth.SelectedDate.Value);
+                selectedMember.Gender = txtGender.Text;
+                selectedMember.Email = txtMemberEmail.Text;
+                selectedMember.PhoneNumber = txtPhoneNumber.Text;
+                selectedMember.Address = txtAddress.Text;
+                selectedMember.Username = txtMemberUsername.Text;
+                selectedMember.Password = txtMemberPassword.Text;
+                selectedMember.IdCardNumber = txtIdCardNumber.Text;
+
+
+
+
+                _LibraryViewModel.UpdateMemberAsync(selectedMember);
+                ClearFieldsMember();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần cập nhật.");
+            }
+        }
+
+        private void DeleteMember_Click(object sender, RoutedEventArgs e)
+        {
+            if (myMember.SelectedItem is Member selectedMember)
+            {
+                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa Member này không?",
+                                              "Xác nhận xóa",
+                                              MessageBoxButton.YesNo,
+                                              MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _LibraryViewModel.DeleteMemberAsync(selectedMember.MemberId);
+
+
+
+                    ClearFieldsMember();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần xóa.");
+            }
+        }
+
+        private void ClearMember_Click(object sender, RoutedEventArgs e)
+        {
+            txtMemberFullName.Clear();
+            dpDateOfBirth.SelectedDate = null;
+            txtGender.Clear();
+            txtMemberEmail.Clear();
+            txtPhoneNumber.Clear();
+            txtAddress.Clear();
+            txtMemberUsername.Clear();
+            txtMemberPassword.Clear();
+            txtIdCardNumber.Clear();
+        }
+
     }
 }

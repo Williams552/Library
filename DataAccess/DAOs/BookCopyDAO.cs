@@ -22,7 +22,7 @@ namespace DataAccess.DAOs
         }
 
         // Lay id cua tai khoan dang dang nhap dua tren jwt token lay duoc
-        private int GetUserId()
+        public int GetUserId()
         {
             var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))

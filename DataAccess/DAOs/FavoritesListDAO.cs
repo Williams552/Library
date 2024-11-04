@@ -27,7 +27,7 @@ namespace DataAccess.DAOs
             _httpContextAccessor = httpContextAccessor;
         }
 
-        private int GetUserId()
+        public int GetUserId()
         {
             var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst("userID");
             if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
