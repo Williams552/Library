@@ -41,6 +41,12 @@ namespace WpfLibrary
         {
         }
 
+
+
+        //--------------------------------------------------Staff-------------------------------------------------
+
+
+
         private void myDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (myDataGrid.SelectedItem is Models.Staff selectedStaff)
@@ -131,6 +137,12 @@ namespace WpfLibrary
             }
         }
 
+
+
+
+
+
+
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             txtStaffid.Clear();
@@ -178,6 +190,12 @@ namespace WpfLibrary
             txtStatus.Clear();
 
         }
+
+
+
+        //--------------------------------------------------Supplier-------------------------------------------------
+
+
 
         private void myDataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
@@ -264,6 +282,14 @@ namespace WpfLibrary
             txtContactInfo.Clear();
         }
 
+
+
+
+        //--------------------------------------------------Cate-------------------------------------------------
+
+
+
+
         private void mydata_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (mydata.SelectedItem is Category selectedCategory)
@@ -343,6 +369,13 @@ namespace WpfLibrary
                 MessageBox.Show("Vui lòng chọn danh mục cần xóa.");
             }
         }
+
+
+
+
+        //--------------------------------------------------Fee-------------------------------------------------
+
+
 
 
         private void mydata1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -439,6 +472,14 @@ namespace WpfLibrary
             txtDiscription.Clear();
         }
 
+
+
+
+        //--------------------------------------------------Publiser-------------------------------------------------
+
+
+
+
         private void mydata2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (mydata2.SelectedItem is Publisher select)
@@ -525,6 +566,13 @@ namespace WpfLibrary
 
         }
 
+
+
+
+        //--------------------------------------------------BookGroup-------------------------------------------------
+
+
+
         private void BookGroupData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (BookGroupData.SelectedItem is BookGroup select)
@@ -604,6 +652,13 @@ namespace WpfLibrary
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin book group.");
             }
         }
+
+
+
+
+        //--------------------------------------------------BookShelf-------------------------------------------------
+
+
 
         private void BookShelfData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -687,6 +742,14 @@ namespace WpfLibrary
                 MessageBox.Show("Vui lòng chọn bookshelf cần xóa.");
             }
         }
+
+
+
+
+        //--------------------------------------------------Loan-------------------------------------------------
+
+
+
 
         private void myDataGrid_SelectionChanged_2(object sender, SelectionChangedEventArgs e)
         {
@@ -780,6 +843,12 @@ namespace WpfLibrary
             txtBorrowFee.Clear();
             txtStatus.Clear();
         }
+
+
+
+
+        //--------------------------------------------------Book-------------------------------------------------
+
 
         private void BookData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -903,6 +972,13 @@ namespace WpfLibrary
             }
         }
 
+
+
+
+        //--------------------------------------------------Author-------------------------------------------------
+
+
+
         private void AddAuthor_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(txtFullNameAuthor.Text) && !string.IsNullOrEmpty(txtBiography.Text) && !string.IsNullOrEmpty(txtAvartar.Text))
@@ -981,6 +1057,7 @@ namespace WpfLibrary
             txtAvartar.Clear();
         }
 
+
         private void myAuthor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (myAuthor.SelectedItem is Author selectedAuthor)
@@ -991,5 +1068,140 @@ namespace WpfLibrary
                 txtAvartar.Text = selectedAuthor.Avartar;
             }
             }
+
+
+
+
+
+        //--------------------------------------------------Member-------------------------------------------------
+
+
+        private void myMember_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (myMember.SelectedItem is Member selectedMember)
+            {
+                // Cập nhật các trường nhập liệu với thông tin của danh mục đã chọn
+                txtMemberFullName.Text = selectedMember.FullName;
+                dpDateOfBirth.SelectedDate = selectedMember.DateOfBirth.ToDateTime(TimeOnly.MinValue);
+                txtGender.Text = selectedMember.Gender;
+                txtMemberEmail.Text = selectedMember.Email;
+                txtPhoneNumber.Text = selectedMember.PhoneNumber;
+                txtAddress.Text = selectedMember.Address;
+                txtMemberUsername.Text = selectedMember.Username;
+                txtMemberPassword.Text = selectedMember.Password;
+                txtIdCardNumber.Text = selectedMember.IdCardNumber;
+            }
+        }
+
+
+        private void AddMember_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtMemberFullName.Text) && dpDateOfBirth.SelectedDate.HasValue && !string.IsNullOrEmpty(txtGender.Text) && !string.IsNullOrEmpty(txtMemberEmail.Text) && !string.IsNullOrEmpty(txtPhoneNumber.Text) && !string.IsNullOrEmpty(txtAddress.Text) && !string.IsNullOrEmpty(txtMemberUsername.Text) && !string.IsNullOrEmpty(txtMemberPassword.Text) && !string.IsNullOrEmpty(txtIdCardNumber.Text))
+            {
+
+
+                var newMember = new Member
+                {
+
+                    FullName = txtMemberFullName.Text,
+                    DateOfBirth = DateOnly.FromDateTime(dpDateOfBirth.SelectedDate.Value),
+                    Gender = txtGender.Text,
+                    Email = txtMemberEmail.Text,
+                    PhoneNumber = txtPhoneNumber.Text,
+                    Address = txtAddress.Text,
+                    Username = txtMemberUsername.Text,
+                    Password = txtMemberPassword.Text,  
+                    IdCardNumber = txtIdCardNumber.Text,
+
+                };
+
+                _LibraryViewModel.AddMemberAsync(newMember);
+
+
+
+                ClearFieldsMember();
+
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin danh mục.");
+            }
+        }
+
+        private void ClearFieldsMember()
+        {
+            txtMemberFullName.Clear();
+            dpDateOfBirth.SelectedDate = null;
+            txtGender.Clear();
+            txtMemberEmail.Clear();
+            txtPhoneNumber.Clear();
+            txtAddress.Clear();
+            txtMemberUsername.Clear();
+            txtMemberPassword.Clear();
+            txtIdCardNumber.Clear();
+        }
+
+        private void UpdateMember_Click(object sender, RoutedEventArgs e)
+        {
+            if (myMember.SelectedItem is Member selectedMember)
+            {
+                selectedMember.FullName = txtMemberFullName.Text;
+                selectedMember.DateOfBirth = DateOnly.FromDateTime(dpDateOfBirth.SelectedDate.Value);
+                selectedMember.Gender = txtGender.Text;
+                selectedMember.Email = txtMemberEmail.Text;
+                selectedMember.PhoneNumber = txtPhoneNumber.Text;
+                selectedMember.Address = txtAddress.Text;
+                selectedMember.Username = txtMemberUsername.Text;
+                selectedMember.Password = txtMemberPassword.Text;
+                selectedMember.IdCardNumber = txtIdCardNumber.Text;
+
+
+
+
+                _LibraryViewModel.UpdateMemberAsync(selectedMember);
+                ClearFieldsMember();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần cập nhật.");
+            }
+        }
+
+        private void DeleteMember_Click(object sender, RoutedEventArgs e)
+        {
+            if (myMember.SelectedItem is Member selectedMember)
+            {
+                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa Member này không?",
+                                              "Xác nhận xóa",
+                                              MessageBoxButton.YesNo,
+                                              MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _LibraryViewModel.DeleteMemberAsync(selectedMember.MemberId);
+
+
+
+                    ClearFieldsMember();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần xóa.");
+            }
+        }
+
+        private void ClearMember_Click(object sender, RoutedEventArgs e)
+        {
+            txtMemberFullName.Clear();
+            dpDateOfBirth.SelectedDate = null;
+            txtGender.Clear();
+            txtMemberEmail.Clear();
+            txtPhoneNumber.Clear();
+            txtAddress.Clear();
+            txtMemberUsername.Clear();
+            txtMemberPassword.Clear();
+            txtIdCardNumber.Clear();
+        }
+
     }
 }

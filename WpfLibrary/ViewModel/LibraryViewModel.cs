@@ -33,7 +33,10 @@ namespace WpfLibrary.ViewModel
 
 
         public ObservableCollection<Book> book { get; set; } = new ObservableCollection<Book>();
+        public ObservableCollection<Member> members { get; set; } = new ObservableCollection<Member>();
 
+
+        public Member SelectedMember { get; set; }
         public Book SelectedBook { get; set; }
 
         public Models.Staff SelectedStaff { get; set; } = new Models.Staff();
@@ -71,6 +74,7 @@ namespace WpfLibrary.ViewModel
             LoadBookshelfAsync();
             LoadLoanAsync();
             LoadBookAsync();
+            LoadMember();
             //AttachJwtTokenToClient();
 
             AddStaffCommand = new RelayCommand(async (staff) => await AddStaffAsync((Models.Staff)staff));
@@ -79,6 +83,19 @@ namespace WpfLibrary.ViewModel
 
             AddSupplierCommand = new RelayCommand(async (supplier) => await AddSupplierAsync((Supplier)supplier));
             UpdateSupplierCommand = new RelayCommand(async (supplier) => await UpdateSupplierAsync((Supplier)supplier));
+        }
+
+        public async Task LoadMember()
+        {
+            var memberList = await _httpClient.GetFromJsonAsync<List<Member>>("Member");
+            if(memberList != null)
+            {
+                members.Clear();
+                foreach (var member in memberList)
+                {
+                    members.Add(member);
+                }    
+            }    
         }
 
         public async Task LoadLoanAsync()
@@ -206,6 +223,25 @@ namespace WpfLibrary.ViewModel
             }
         }
 
+        public async Task LoadPublisherAsync()
+        {
+            var publisher = await _httpClient.GetFromJsonAsync<List<Publisher>>("Publisher");
+            if (publisher != null)
+            {
+                Pub.Clear();
+                foreach (var pub in publisher)
+                {
+                    Pub.Add(pub);
+                }
+            }
+        }
+
+
+
+        //--------------------------------------------------Book-------------------------------------------------
+
+
+
         public async Task AddBookAsync(Book newBook)
         {
             var response = await _httpClient.PostAsJsonAsync("Book", newBook);
@@ -248,6 +284,10 @@ namespace WpfLibrary.ViewModel
             
             return Cate.Any(c => c.CategoryCode.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
+
+
+
+        //--------------------------------------------------Cate-------------------------------------------------
 
 
         public async Task AddCategoryAsync(Category category)
@@ -297,7 +337,12 @@ namespace WpfLibrary.ViewModel
             }
         }
 
-        //fee
+
+
+        //--------------------------------------------------Fee-------------------------------------------------
+
+
+
         public async Task AddFeeAsync(Fee fe)
         {
             var response = await _httpClient.PostAsJsonAsync("Fee", fe);
@@ -332,18 +377,12 @@ namespace WpfLibrary.ViewModel
         }
 
         //load Publisher
-        public async Task LoadPublisherAsync()
-        {
-            var publisher = await _httpClient.GetFromJsonAsync<List<Publisher>>("Publisher");
-            if (publisher != null)
-            {
-                Pub.Clear();
-                foreach (var pub in publisher)
-                {
-                    Pub.Add(pub);
-                }
-            }
-        }
+        
+
+
+
+        //--------------------------------------------------Pub-------------------------------------------------
+
 
         public async Task AddPub(Publisher _pub)
         {
@@ -385,6 +424,10 @@ namespace WpfLibrary.ViewModel
                 if (pub != null) Pub.Remove(pub);
             }
         }
+
+
+
+        //--------------------------------------------------Staff-------------------------------------------------
 
 
         public async Task AddStaffAsync(Models.Staff staff)
@@ -429,6 +472,9 @@ namespace WpfLibrary.ViewModel
 
 
 
+        //--------------------------------------------------Supplier-------------------------------------------------
+
+
         public async Task AddSupplierAsync(Supplier supplier)
         {
             var response = await _httpClient.PostAsJsonAsync("Supplier", supplier);
@@ -469,6 +515,11 @@ namespace WpfLibrary.ViewModel
             }
         }
 
+
+
+        //--------------------------------------------------BookGroup-------------------------------------------------
+
+
         public async Task DeleteBookgroupAsync(int bookGroupId)
         {
             var respone = await _httpClient.DeleteAsync($"BookGroup/{bookGroupId}");
@@ -504,6 +555,12 @@ namespace WpfLibrary.ViewModel
                 MessageBox.Show($"Lỗi khi thêm nhóm sách: {errorMessage}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
+
+        //--------------------------------------------------Bookshelf-------------------------------------------------
+
+
 
         public async Task AddBookshelfAsync(Bookshelf bookshelf)
         {
@@ -543,6 +600,10 @@ namespace WpfLibrary.ViewModel
             }
         }
 
+
+        //--------------------------------------------------Loan-------------------------------------------------
+
+
         public async Task AddLoanAsync(Loan loan)
         {
             var response = await _httpClient.PostAsJsonAsync("Loan", loan);
@@ -568,6 +629,10 @@ namespace WpfLibrary.ViewModel
                 }
             }
         }
+
+
+        //--------------------------------------------------Author-------------------------------------------------
+
 
         public async Task AddAuthorAsync(Author author)
         {
@@ -605,6 +670,50 @@ namespace WpfLibrary.ViewModel
                 {
                     authors.Remove(author);
                     SelectedAuthor = new Author();
+                }
+            }
+        }
+
+
+        //--------------------------------------------------Member-------------------------------------------------
+
+
+        public async Task AddMemberAsync(Member member)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Member", member);
+            if (response.IsSuccessStatusCode)
+            {
+                members.Add(member);
+                SelectedMember = new Member();
+            }
+        }
+
+        public async Task UpdateMemberAsync(Member member)
+        {
+            if (member != null)
+            {
+                var response = await _httpClient.PutAsJsonAsync($"Member/{member.MemberId}", member);
+                if (response.IsSuccessStatusCode)
+                {
+                    var index = members.IndexOf(members.First(s => s.MemberId == member.MemberId));
+                    if (index >= 0)
+                    {
+                        members[index] = member;
+                    }
+                }
+            }
+        }
+
+        public async Task DeleteMemberAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"Member/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var member = members.FirstOrDefault(s => s.MemberId == id);
+                if (member != null)
+                {
+                    members.Remove(member);
+                    SelectedMember = new Member();
                 }
             }
         }
