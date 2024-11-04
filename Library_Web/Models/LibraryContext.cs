@@ -110,39 +110,30 @@ public partial class LibraryContext : DbContext
             entity.Property(e => e.AuthorId).HasColumnName("author_id");
             entity.Property(e => e.AvailableCopies).HasColumnName("available_copies");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
-            entity.Property(e => e.Cover)
-                .HasMaxLength(255)
-                .HasColumnName("cover");
+            entity.Property(e => e.Cover).HasColumnName("cover");
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("created_at");
             entity.Property(e => e.CreatedBy).HasColumnName("created_by");
             entity.Property(e => e.DamageFee)
-                .HasColumnType("numeric(18, 0)")
+                .HasColumnType("decimal(18, 2)")
                 .HasColumnName("damage_fee");
             entity.Property(e => e.DeletedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("deleted_at");
             entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
-            entity.Property(e => e.Description)
-                .IsUnicode(false)
-                .HasColumnName("description");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.ImageLink).HasColumnName("image_link");
             entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
             entity.Property(e => e.MaxCopiesPerShelf).HasColumnName("max_copies_per_shelf");
-            entity.Property(e => e.PdfLink)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("pdf_link");
+            entity.Property(e => e.PdfLink).HasColumnName("pdf_link");
             entity.Property(e => e.Price)
-                .HasColumnType("numeric(18, 0)")
+                .HasColumnType("decimal(18, 2)")
                 .HasColumnName("price");
             entity.Property(e => e.PublishYear).HasColumnName("publish_year");
             entity.Property(e => e.PublisherId).HasColumnName("publisher_id");
             entity.Property(e => e.SupplierId).HasColumnName("supplier_id");
-            entity.Property(e => e.Title)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("title");
+            entity.Property(e => e.Title).HasColumnName("title");
             entity.Property(e => e.UpdatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("updated_at");
@@ -152,22 +143,18 @@ public partial class LibraryContext : DbContext
 
             entity.HasOne(d => d.Author).WithMany(p => p.Books)
                 .HasForeignKey(d => d.AuthorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Books_Authors");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Books)
                 .HasForeignKey(d => d.CategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Books_Categories");
 
             entity.HasOne(d => d.Publisher).WithMany(p => p.Books)
                 .HasForeignKey(d => d.PublisherId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Books_Publishers");
 
             entity.HasOne(d => d.Supplier).WithMany(p => p.Books)
                 .HasForeignKey(d => d.SupplierId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Books_Suppliers");
         });
 

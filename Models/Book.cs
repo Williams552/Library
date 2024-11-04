@@ -51,6 +51,8 @@ public partial class Book
 
     public int? Views { get; set; }
 
+    public string? ImageLink { get; set; }
+
     public virtual Author? Author { get; set; }
 
     public virtual BookCopy? BookCopy { get; set; }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class MakeMemberPropertiesNullable : Migration
+    public partial class MyInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -170,7 +170,7 @@ namespace DataAccess.Migrations
                     membership_fee = table.Column<int>(type: "int", nullable: true),
                     reset_pin = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     reset_pin_expire = table.Column<DateTime>(type: "datetime", nullable: true),
-                    role = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
+                    role = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     membership_fee_due_date = table.Column<DateTime>(type: "datetime", nullable: true),
                     balance = table.Column<decimal>(type: "numeric(18,0)", nullable: true)
                 },
@@ -308,28 +308,29 @@ namespace DataAccess.Migrations
                 {
                     book_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    title = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    description = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
-                    publish_year = table.Column<int>(type: "int", nullable: false),
-                    max_copies_per_shelf = table.Column<int>(type: "int", nullable: false),
-                    author_id = table.Column<int>(type: "int", nullable: false),
-                    category_id = table.Column<int>(type: "int", nullable: false),
-                    supplier_id = table.Column<int>(type: "int", nullable: false),
-                    publisher_id = table.Column<int>(type: "int", nullable: false),
+                    title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    publish_year = table.Column<int>(type: "int", nullable: true),
+                    max_copies_per_shelf = table.Column<int>(type: "int", nullable: true),
+                    author_id = table.Column<int>(type: "int", nullable: true),
+                    category_id = table.Column<int>(type: "int", nullable: true),
+                    supplier_id = table.Column<int>(type: "int", nullable: true),
+                    publisher_id = table.Column<int>(type: "int", nullable: true),
                     created_by = table.Column<int>(type: "int", nullable: true),
                     created_at = table.Column<DateTime>(type: "datetime", nullable: true),
                     updated_by = table.Column<int>(type: "int", nullable: true),
                     updated_at = table.Column<DateTime>(type: "datetime", nullable: true),
                     deleted_by = table.Column<int>(type: "int", nullable: true),
                     deleted_at = table.Column<DateTime>(type: "datetime", nullable: true),
-                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
-                    price = table.Column<decimal>(type: "numeric(18,0)", nullable: false),
-                    available_copies = table.Column<int>(type: "int", nullable: false),
-                    damage_fee = table.Column<decimal>(type: "numeric(18,0)", nullable: false),
-                    warehouse = table.Column<bool>(type: "bit", nullable: false),
-                    cover = table.Column<byte[]>(type: "varbinary(255)", maxLength: 255, nullable: false),
-                    pdf_link = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    views = table.Column<int>(type: "int", nullable: true)
+                    is_deleted = table.Column<bool>(type: "bit", nullable: true),
+                    price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    available_copies = table.Column<int>(type: "int", nullable: true),
+                    damage_fee = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    warehouse = table.Column<bool>(type: "bit", nullable: true),
+                    cover = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    pdf_link = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    views = table.Column<int>(type: "int", nullable: true),
+                    image_link = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

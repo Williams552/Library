@@ -103,6 +103,7 @@ namespace DataAccess.DAOs
                 existingBook.Warehouse = book.Warehouse;
                 existingBook.DamageFee = book.Price * 0.2m;
                 existingBook.Cover = book.Cover;
+                existingBook.ImageLink = book.ImageLink;
                 existingBook.PdfLink = book.PdfLink;
                 existingBook.IsDeleted = false;
                 await _context.SaveChangesAsync();

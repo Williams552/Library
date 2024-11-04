@@ -124,6 +124,7 @@ public partial class LibraryContext : DbContext
                 .HasColumnName("deleted_at");
             entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
             entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.ImageLink).HasColumnName("image_link");
             entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
             entity.Property(e => e.MaxCopiesPerShelf).HasColumnName("max_copies_per_shelf");
             entity.Property(e => e.PdfLink).HasColumnName("pdf_link");

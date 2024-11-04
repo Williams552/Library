@@ -96,3 +96,18 @@ body {
     margin-bottom: auto;
     padding: 10px 0; /* Tạo khoảng trống cho rating */
 }
+
+/* Bố trí hàng ngang cho các form */
+.form-row {
+    display: flex;
+    gap: 20px; /* Khoảng cách giữa hai form */
+}
+
+/* Kích thước cho từng form */
+.form-wrapper {
+    flex: 1; /* Chiếm cùng không gian */
+}
+
+.card {
+    margin-top: 0;
+}
