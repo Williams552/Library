@@ -97,22 +97,20 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"));
 
-                    b.Property<int>("AuthorId")
+                    b.Property<int?>("AuthorId")
                         .HasColumnType("int")
                         .HasColumnName("author_id");
 
-                    b.Property<int>("AvailableCopies")
+                    b.Property<int?>("AvailableCopies")
                         .HasColumnType("int")
                         .HasColumnName("available_copies");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int")
                         .HasColumnName("category_id");
 
                     b.Property<byte[]>("Cover")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varbinary(255)")
+                        .HasColumnType("varbinary(max)")
                         .HasColumnName("cover");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -123,8 +121,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("int")
                         .HasColumnName("created_by");
 
-                    b.Property<decimal>("DamageFee")
-                        .HasColumnType("numeric(18, 0)")
+                    b.Property<decimal?>("DamageFee")
+                        .HasColumnType("decimal(18, 2)")
                         .HasColumnName("damage_fee");
 
                     b.Property<DateTime?>("DeletedAt")
@@ -136,47 +134,43 @@ namespace DataAccess.Migrations
                         .HasColumnName("deleted_by");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("description");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<string>("ImageLink")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("image_link");
+
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit")
                         .HasColumnName("is_deleted");
 
-                    b.Property<int>("MaxCopiesPerShelf")
+                    b.Property<int?>("MaxCopiesPerShelf")
                         .HasColumnType("int")
                         .HasColumnName("max_copies_per_shelf");
 
                     b.Property<string>("PdfLink")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("pdf_link");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric(18, 0)")
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18, 2)")
                         .HasColumnName("price");
 
-                    b.Property<int>("PublishYear")
+                    b.Property<int?>("PublishYear")
                         .HasColumnType("int")
                         .HasColumnName("publish_year");
 
-                    b.Property<int>("PublisherId")
+                    b.Property<int?>("PublisherId")
                         .HasColumnType("int")
                         .HasColumnName("publisher_id");
 
-                    b.Property<int>("SupplierId")
+                    b.Property<int?>("SupplierId")
                         .HasColumnType("int")
                         .HasColumnName("supplier_id");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("title");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -191,7 +185,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("int")
                         .HasColumnName("views");
 
-                    b.Property<bool>("Warehouse")
+                    b.Property<bool?>("Warehouse")
                         .HasColumnType("bit")
                         .HasColumnName("warehouse");
 
@@ -963,10 +957,8 @@ namespace DataAccess.Migrations
                         .HasColumnName("reset_pin_expire");
 
                     b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("role");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -1510,25 +1502,21 @@ namespace DataAccess.Migrations
                     b.HasOne("Models.Author", "Author")
                         .WithMany("Books")
                         .HasForeignKey("AuthorId")
-                        .IsRequired()
                         .HasConstraintName("FK_Books_Authors");
 
                     b.HasOne("Models.Category", "Category")
                         .WithMany("Books")
                         .HasForeignKey("CategoryId")
-                        .IsRequired()
                         .HasConstraintName("FK_Books_Categories");
 
                     b.HasOne("Models.Publisher", "Publisher")
                         .WithMany("Books")
                         .HasForeignKey("PublisherId")
-                        .IsRequired()
                         .HasConstraintName("FK_Books_Publishers");
 
                     b.HasOne("Models.Supplier", "Supplier")
                         .WithMany("Books")
                         .HasForeignKey("SupplierId")
-                        .IsRequired()
                         .HasConstraintName("FK_Books_Suppliers");
 
                     b.Navigation("Author");

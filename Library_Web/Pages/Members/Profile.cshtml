@@ -1,0 +1,150 @@
+﻿@page
+@model Library_Web.Pages.Members.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+
+<div class="container">
+    <div class="row justify-content-center d-flex">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header">
+                    <div class="form-group mb-3 text-center">
+                        <img src="@Model.item.ProfilePicture" alt="Profile Picture" class="rounded-circle" style="width: 300px; height: 300px; object-fit: cover;">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control" asp-for="item.ProfilePicture">
+                            <label asp-for="item.FullName">Đường Dẫn Hình Ảnh:</label>
+                            <span asp-validation-for="item.FullName" class="text-danger"></span>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <input type="text" class="form-control" asp-for="item.MemberId" readonly>
+                                    <label asp-for="item.MemberId">Mã Tài Khoản:</label>
+                                    <span asp-validation-for="item.MemberId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <input type="text" class="form-control" asp-for="item.IdCardNumber" readonly>
+                                    <label asp-for="item.IdCardNumber">Chứng Minh Thư:</label>
+                                    <span asp-validation-for="item.IdCardNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <input type="text" class="form-control" asp-for="item.FullName">
+                                    <label asp-for="item.FullName">Họ & Tên:</label>
+                                    <span asp-validation-for="item.FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <input type="text" class="form-control" asp-for="item.FullName" readonly>
+                                    <label asp-for="item.MemberId">Được Tạo Bởi:</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <input type="text" class="form-control" asp-for="item.Email">
+                                    <label asp-for="item.Email">Email:</label>
+                                    <span asp-validation-for="item.Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <input type="text" class="form-control" asp-for="item.CreatedAt" readonly>
+                                    <label asp-for="item.MemberId">Ngày Tạo:</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <input type="text" class="form-control" asp-for="item.PhoneNumber">
+                                    <label asp-for="item.PhoneNumber">Số Điện Thoại:</label>
+                                    <span asp-validation-for="item.PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <input type="text" class="form-control" asp-for="item.UpdatedAt" readonly>
+                                    <label asp-for="item.MemberId">Cập Nhật Lần Cuối:</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <input type="date" class="form-control" asp-for="item.DateOfBirth">
+                                    <label asp-for="item.DateOfBirth">Ngày sinh:</label>
+                                    <span asp-validation-for="item.DateOfBirth" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <div class="mb-2">
+                                        <div class="d-flex">
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" class="form-check-input" asp-for="item.Gender" value="Nam" id="genderMale">
+                                                <label class="form-check-label" for="genderMale">Nam</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" class="form-check-input" asp-for="item.Gender" value="Nữ" id="genderFemale">
+                                                <label class="form-check-label" for="genderFemale">Nữ</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" class="form-check-input" asp-for="item.Gender" value="Khác" id="genderOther">
+                                                <label class="form-check-label" for="genderOther">Khác</label>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="item.Gender" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 mb-md-0">
+                                    <input type="text" class="form-control" asp-for="item.Address">
+                                    <label asp-for="item.Address">Địa Chỉ:</label>
+                                    <span asp-validation-for="item.Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                         <input type="hidden" asp-for="item.Username" />
+                        <input type="hidden" asp-for="item.Password" />
+                        <input type="hidden" asp-for="item.Role" value="Member" />
+
+
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <p style="color:red">@TempData["ErrorMessage"]</p>
+                        }
+                        <div class="row">
+                            <div class="col-6">
+                                <!-- Nút đăng ký -->
+                                <a asp-page="/Members/ChangePassword" style="text-decoration: none;">Đổi Mật Khẩu</a>
+                            </div>
+                        </div>
+                        <hr>
+                        <button type="submit" class="btn-primary btn-user btn-block">Cập Nhật Thông Tin</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

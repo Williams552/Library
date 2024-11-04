@@ -2,6 +2,8 @@ using Repository;
 using Repository.interfaces;
 using DataAccess.DAOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity.UI.Services;
+
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -81,6 +83,9 @@ builder.Services.AddScoped<StaffDAO, StaffDAO>();
 
 //Jwt Token
 builder.Services.AddSingleton<JwtTokenService>();
+
+// Email Sender
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 //IHttpContextAccessor
 builder.Services.AddHttpContextAccessor();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace Models;
 
@@ -28,6 +27,5 @@ public partial class Author
 
     public string Avartar { get; set; } = null!;
 
-    [JsonIgnore]
     public virtual ICollection<Book> Books { get; set; } = new List<Book>();
 }
