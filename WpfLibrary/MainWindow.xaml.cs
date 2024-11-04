@@ -56,10 +56,6 @@ namespace WpfLibrary
             _staffViewModel.SetPassword(passwordBox.Password);
         }
 
-        private void Border_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {

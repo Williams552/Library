@@ -417,6 +417,7 @@ Height="auto">
   Kind="BookAdd" />
                             <TextBlock
   HorizontalAlignment="Center"
+
   Text="BookGroup" />
                         </StackPanel>
                     </TabItem.Header>
@@ -541,6 +542,101 @@ Width="348" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left" 
                             </StackPanel>
                         </StackPanel>
 
+                    </StackPanel>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Width="auto" Height="auto">
+                            <materialDesign:PackIcon Width="24" Height="24" HorizontalAlignment="Center" Kind="CurrencyUsd" />
+                            <TextBlock HorizontalAlignment="Center" Text="Loan" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <StackPanel Margin="16">
+                        <TextBlock Margin="0,0,0,8" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Loan" />
+                        <TextBlock Height="11">
+            <LineBreak />
+            <LineBreak />
+                        </TextBlock>
+
+                        <!-- DataGrid for displaying staff members -->
+                        <DataGrid Height="134" IsReadOnly="False" ItemsSource="{Binding loans}" 
+                  SelectedItem="{Binding SelectedLoan}" SelectionChanged="myDataGrid_SelectionChanged_2"
+                  AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" x:Name="myLoan">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#333" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Padding" Value="5" />
+                                    <Setter Property="BorderBrush" Value="White" />
+                                    <Setter Property="BorderThickness" Value="0.5" />
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn IsReadOnly="True" Header="LoanId" Binding="{Binding LoanId}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="UserId" Binding="{Binding UserId}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="CopyId" Binding="{Binding CopyId}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="LoanDate" Binding="{Binding LoanDate}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="ReturnDate" Binding="{Binding ReturnDate}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="DueDate" Binding="{Binding DueDate}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="Fine" Binding="{Binding Fine}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="BorrowFee" Binding="{Binding BorrowFee}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="Status" Binding="{Binding Status}" />
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" Margin="0,10,10,0" Width="696" Height="336">
+                            <StackPanel Margin="10" HorizontalAlignment="Center" Orientation="Horizontal">
+                                <StackPanel Margin="0,0,10,0" >
+                                    <TextBlock FontWeight="Bold" Text="User ID" Margin="5" />
+                                    <TextBox x:Name="txtUserId" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewLoan.UserId, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+
+                                    <TextBlock FontWeight="Bold" Text="Copy Id" Margin="5" />
+                                    <TextBox x:Name="txtCopyId" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewLoan.CopyId, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+                                    <TextBlock FontWeight="Bold" Text="LoanDate" Margin="5" />
+                                    <DatePicker x:Name="dpLoanDate" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewLoan.LoanDate, UpdateSourceTrigger=PropertyChanged}" Width="250" />
+                                    <TextBlock FontWeight="Bold" Text="ReturnDate" Margin="5" />
+                                    <DatePicker x:Name="dpReturnDate" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewLoan.ReturnDate, UpdateSourceTrigger=PropertyChanged}" Width="250" />
+                                </StackPanel>
+                                <StackPanel>
+                                    
+
+                                    <TextBlock FontWeight="Bold" Text="DueDate" Margin="5" />
+                                    <DatePicker x:Name="dpDueDate" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewLoan.DueDate, UpdateSourceTrigger=PropertyChanged}" Width="250" />
+
+                                    <TextBlock FontWeight="Bold" Text="Fine" Margin="5" />
+                                    <TextBox x:Name="txtFine" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewLoan.Fine, UpdateSourceTrigger=PropertyChanged}" Width="250" />
+
+                                    <TextBlock FontWeight="Bold" Text="BorrowFee" Margin="5" />
+                                    <TextBox x:Name="txtBorrowFee" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewLoan.BorrowFee, UpdateSourceTrigger=PropertyChanged}" Width="250" />
+
+                                    <TextBlock FontWeight="Bold" Text="Status" Margin="5" />
+                                    <TextBox x:Name="txtStatus" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewLoan.Status, UpdateSourceTrigger=PropertyChanged}" Width="250" />
+                                </StackPanel>
+
+
+
+
+                            </StackPanel>
+
+                            <!-- Buttons for CRUD operations -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                                <Button Click="AddLoan_Click" Content="Add" Command="{Binding AddCommand}" Width="100" Margin="0,0,5,0" />
+                                <Button Click="UpdateLoan_Click" Content="Update" Command="{Binding UpdateCommand}" Width="100" Margin="5,0,5,0" />
+                                <Button Click="ClearLoan_Click" Content="Clear" Command="{Binding ClearCommand}" Width="100" />
+                            </StackPanel>
+                        </StackPanel>
                     </StackPanel>
                 </TabItem>
             </TabControl>
