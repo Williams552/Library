@@ -19,9 +19,8 @@ namespace WpfLibrary.ViewModel
         public ObservableCollection<Category> Cate { get; set; } = new ObservableCollection<Category>();
 
         public ObservableCollection<Publisher> Pub { get; set; } = new ObservableCollection<Publisher>();
-
+        public ObservableCollection<Author> Authors { get; set; } = new ObservableCollection<Author>();
         public ObservableCollection<Fee> fee { get; set; } = new ObservableCollection<Fee>();
-
         public ObservableCollection<Models.Staff> StaffMembers { get; set; } = new ObservableCollection<Models.Staff>();
         public ObservableCollection<Supplier> suppliers { get; set; } = new ObservableCollection<Supplier>();
 
@@ -64,12 +63,12 @@ namespace WpfLibrary.ViewModel
             LoadFeeAsync();
             LoadPublisherAsync();
             LoadStaffAsync();
+            LoadAuthorAsync();
             LoadSupplierAsync();
             LoadBookGroupsAsync();
             LoadBookshelfAsync();
             LoadLoanAsync();
             LoadBookAsync();
-
             //AttachJwtTokenToClient();
 
             AddStaffCommand = new RelayCommand(async (staff) => await AddStaffAsync((Models.Staff)staff));
@@ -92,7 +91,18 @@ namespace WpfLibrary.ViewModel
                 }
             }
         }
-
+        public async Task LoadAuthorAsync()
+        {
+            var authors = await _httpClient.GetFromJsonAsync<List<Author>>("Author");
+            if (authors != null)
+            {
+                Authors.Clear();
+                foreach (var item in authors)
+                {
+                    Authors.Add(item);
+                }
+            }
+        }
         private bool CanDelete(object? arg)
         {
             return SelectedStaff != null && SelectedStaff.StaffId > 0;

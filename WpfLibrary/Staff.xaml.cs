@@ -772,5 +772,123 @@ namespace WpfLibrary
             txtBorrowFee.Clear();
             txtStatus.Clear();
         }
+
+        private void BookData_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (BookData.SelectedItem is Book select)
+            {
+                TitleTextBox.Text = select.Title;
+                DescriptionTextBox.Text = select.Description;
+                PublishYearTextBox.Text = select.PublishYear?.ToString() ?? string.Empty;
+                MaxCopiesPerShelfTextBox.Text = select.MaxCopiesPerShelf?.ToString() ?? string.Empty;
+                AuthorComboBox.SelectedValue = select.AuthorId;
+                CategoryComboBox.SelectedValue = select.CategoryId;
+                SupplierComboBox.SelectedValue = select.SupplierId;
+                PublisherComboBox.SelectedValue = select.PublisherId;
+                PriceTextBox.Text = select.Price?.ToString("F2") ?? string.Empty;
+                AvailableCopiesTextBox.Text = select.AvailableCopies?.ToString() ?? string.Empty;
+                WarehouseCheckBox.IsChecked = select.Warehouse;
+                PdfLinkTextBox.Text = select.PdfLink;
+                ImageLinkTextBox.Text = select.ImageLink;
+                DamageFeeTextBox.Text = select.DamageFee?.ToString("F2") ?? string.Empty;
+            }
+        }
+
+        private void Add_Book(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TitleTextBox.Text) &&
+                !string.IsNullOrEmpty(PublishYearTextBox.Text) &&
+                !string.IsNullOrEmpty(PriceTextBox.Text) &&
+                AuthorComboBox.SelectedValue != null &&
+                CategoryComboBox.SelectedValue != null &&
+                SupplierComboBox.SelectedValue != null &&
+                PublisherComboBox.SelectedValue != null)
+            {
+
+
+                var newBook = new Book
+                {
+
+                    Title = TitleTextBox.Text,
+                    Description = DescriptionTextBox.Text,
+                    PublishYear = int.TryParse(PublishYearTextBox.Text, out int publishYear) ? publishYear : (int?)null,
+                    MaxCopiesPerShelf = int.TryParse(MaxCopiesPerShelfTextBox.Text, out int maxCopies) ? maxCopies : (int?)null,
+                    AuthorId = (int)AuthorComboBox.SelectedValue,
+                    CategoryId = (int)CategoryComboBox.SelectedValue,
+                    SupplierId = (int)SupplierComboBox.SelectedValue,
+                    PublisherId = (int)PublisherComboBox.SelectedValue,
+                    Price = decimal.TryParse(PriceTextBox.Text, out decimal price) ? price : (decimal?)null,
+                    DamageFee = decimal.TryParse(DamageFeeTextBox.Text, out decimal damageFee) ? damageFee : (decimal?)null,
+                    AvailableCopies = int.TryParse(AvailableCopiesTextBox.Text, out int availableCopies) ? availableCopies : (int?)null,
+                    PdfLink = PdfLinkTextBox.Text,
+                    ImageLink = ImageLinkTextBox.Text,
+                    Warehouse = WarehouseCheckBox.IsChecked
+                };
+
+                // Add the new book through the ViewModel
+                 _LibraryViewModel.AddBookAsync(newBook);
+
+                // Clear input fields
+                ClearFields();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin sách.");
+            }
+        }
+
+        private void Update_Book(object sender, RoutedEventArgs e)
+        {
+            if (BookData.SelectedItem is Book select)
+            {
+                select.Title = TitleTextBox.Text;
+                select.Description = DescriptionTextBox.Text;
+                select.PublishYear = int.TryParse(PublishYearTextBox.Text, out int publishYear) ? publishYear : (int?)null;
+                select.MaxCopiesPerShelf = int.TryParse(MaxCopiesPerShelfTextBox.Text, out int maxCopies) ? maxCopies : (int?)null;
+                select.AuthorId = AuthorComboBox.SelectedValue is int authorId ? authorId : select.AuthorId;
+                select.CategoryId = CategoryComboBox.SelectedValue is int categoryId ? categoryId : select.CategoryId;
+                select.SupplierId = SupplierComboBox.SelectedValue is int supplierId ? supplierId : select.SupplierId;
+                select.PublisherId = PublisherComboBox.SelectedValue is int publisherId ? publisherId : select.PublisherId;
+                select.Price = decimal.TryParse(PriceTextBox.Text, out decimal price) ? price : select.Price;
+                select.DamageFee = decimal.TryParse(DamageFeeTextBox.Text, out decimal damageFee) ? damageFee : select.DamageFee;
+                select.AvailableCopies = int.TryParse(AvailableCopiesTextBox.Text, out int availableCopies) ? availableCopies : select.AvailableCopies;
+                select.PdfLink = ImageLinkTextBox.Text;
+                select.ImageLink = ImageLinkTextBox.Text;
+                select.Warehouse = WarehouseCheckBox.IsChecked;
+
+                _LibraryViewModel.UpdateBookAsync(select);
+                ClearFields();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần cập nhật.");
+            }
+        }
+
+        private void Delete_Book(object sender, RoutedEventArgs e)
+        {
+            if (BookData.SelectedItem is Book select)
+            {
+
+                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa sách này không?",
+                                               "Xác nhận xóa",
+                                               MessageBoxButton.YesNo,
+                                               MessageBoxImage.Warning);
+
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    _LibraryViewModel.DeleteBookshelfAsync(select.BookId);
+
+
+
+                    ClearFields();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn sách cần xóa.");
+            }
+        }
     }
 }
