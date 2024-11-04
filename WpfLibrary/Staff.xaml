@@ -414,6 +414,173 @@ Height="auto">
   Width="24"
   Height="24"
   HorizontalAlignment="Center"
+  Kind="Book" />
+                            <TextBlock
+  HorizontalAlignment="Center"
+
+  Text="Books" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel Margin="16">
+                        <TextBlock Margin="0,0,0,8"
+         Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+         Text="Books" />
+                        <DataGrid Height="400" IsReadOnly="True" ItemsSource="{Binding book}" SelectedItem="{Binding SelectedBook}" 
+AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" SelectionChanged="BookData_SelectionChanged" x:Name="BookData">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#333" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Padding" Value="5" />
+                                    <Setter Property="BorderBrush" Value="White"/>
+                                    <Setter Property="BorderThickness" Value="0.5"/>
+                                </Style>
+
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding BookId}" Width="*"/>
+                                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                                <DataGridTextColumn Header="Author" Binding="{Binding Author.Name}" Width="*"/>
+                                <DataGridTextColumn Header="Category" Binding="{Binding Category.Name}" Width="*"/>
+                                <DataGridTextColumn Header="Year" Binding="{Binding PublishYear}" Width="*"/>
+                                <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=C}" Width="*"/>
+                                <DataGridTextColumn Header="Available Copies" Binding="{Binding AvailableCopies}" Width="*"/>
+                                <DataGridTextColumn Header="Views" Binding="{Binding Views}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <StackPanel Height="auto" HorizontalAlignment="Center" Margin="0,0,5,0">
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Title" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="TitleTextBox" Text="{Binding SelectedBook.Title, UpdateSourceTrigger=PropertyChanged}" Width="250" HorizontalAlignment="Left"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Description" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="DescriptionTextBox" Text="{Binding SelectedBook.Description, UpdateSourceTrigger=PropertyChanged}" 
+Width="250" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Publish Year" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="PublishYearTextBox" Text="{Binding SelectedBook.PublishYear, UpdateSourceTrigger=PropertyChanged}" 
+Width="250" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Max Copies per Shelf" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="MaxCopiesPerShelfTextBox" Text="{Binding SelectedBook.MaxCopiesPerShelf, UpdateSourceTrigger=PropertyChanged}" 
+Width="250" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Select Author" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <ComboBox 
+    					                ItemsSource="{Binding Authors}" 
+    					                DisplayMemberPath="Name" 
+    					                SelectedValuePath="AuthorId"
+                                        x:Name="AuthorComboBox"
+    					                SelectedValue="{Binding SelectedBook.AuthorId, Mode=TwoWay}" />
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Select Category" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <ComboBox 
+    					                ItemsSource="{Binding Cate}" 
+    					                DisplayMemberPath="Name" 
+    					                SelectedValuePath="CategoryId" 
+                                        x:Name="CategoryComboBox"
+    					                SelectedValue="{Binding SelectedBook.CategoryId, Mode=TwoWay}" />
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Select Supplier" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <ComboBox 
+    					                ItemsSource="{Binding suppliers}" 
+    					                DisplayMemberPath="Name" 
+    					                SelectedValuePath="SupplierId"
+                                        x:Name="SupplierComboBox"
+    					                SelectedValue="{Binding SelectedBook.SupplierId, Mode=TwoWay}" />
+                                </StackPanel>
+                            </StackPanel>
+                            
+                            <StackPanel Height="auto" HorizontalAlignment="Center" Margin="5,0,0,0">
+                            <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Select Publisher" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <ComboBox 
+    					                ItemsSource="{Binding Pub}" 
+    					                DisplayMemberPath="Name" 
+    					                SelectedValuePath="PublisherId"
+                                        x:Name="PublisherComboBox"
+    					                SelectedValue="{Binding SelectedBook.PublisherId, Mode=TwoWay}" />
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Price" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="PriceTextBox" Text="{Binding SelectedBook.Price, UpdateSourceTrigger=PropertyChanged}" 
+Width="250" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                                </StackPanel>
+
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Available Copies" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="AvailableCopiesTextBox" Text="{Binding SelectedBook.AvailableCopies, UpdateSourceTrigger=PropertyChanged}" 
+Width="250" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Stored in Warehouse" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <CheckBox 
+        				                BorderBrush="#333" 
+        				                BorderThickness="0.5" 
+        				                x:Name="WarehouseCheckBox" 
+        				                IsChecked="{Binding SelectedBook.Warehouse, UpdateSourceTrigger=PropertyChanged}" 
+        				                Width="250"
+                                        Height="25"
+        				                HorizontalAlignment="Left" 
+        				                />
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="PDF Link" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="PdfLinkTextBox" Text="{Binding SelectedBook.PdfLink, UpdateSourceTrigger=PropertyChanged}" 
+Width="250" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Cover Link" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="ImageLinkTextBox" Text="{Binding SelectedBook.ImageLink, UpdateSourceTrigger=PropertyChanged}" 
+Width="250" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Damage Fee" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="DamageFeeTextBox" Text="{Binding SelectedBook.DamageFee, UpdateSourceTrigger=PropertyChanged}" 
+Width="250" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Height="Auto" Width="Auto" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                                <Button Click="Add_Book" Content="Add" Command="{Binding AddCommand}" Width="100" Margin="10,0,0,0"/>
+                                <Button Click="Update_Book" Content="Update" Command="{Binding UpdateCommand}" Width="100" Margin="8,0,8,0"/>
+                                <Button Click="Delete_Book"  Content="Delete" Command="{Binding DeleteCommand}" Width="100"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+Width="auto"
+Height="auto">
+                            <materialDesign:PackIcon
+  Width="24"
+  Height="24"
+  HorizontalAlignment="Center"
   Kind="BookAdd" />
                             <TextBlock
   HorizontalAlignment="Center"
