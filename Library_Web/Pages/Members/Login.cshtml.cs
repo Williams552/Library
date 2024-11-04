@@ -9,16 +9,26 @@ using System.Text.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using Library_Web.Pages.Books;
 
 namespace Library_Web.Pages.Members
 {
     public class LoginModel : PageModel
     {
         private readonly HttpClient _httpClient;
+        private readonly ILogger<LoginModel> _logger;
+
         private class LoginResponse
         {
             public string message { get; set; }
             public string token { get; set; }
+        }
+
+        // Giữ lại constructor này
+        public LoginModel(HttpClient httpClient, ILogger<LoginModel> logger)
+        {
+            _httpClient = httpClient;
+            _logger = logger;
         }
 
         private IDictionary<string, string> DecodeJwtToken(string token)
@@ -37,11 +47,6 @@ namespace Library_Web.Pages.Members
         [BindProperty]
         public string Password { get; set; }
 
-        public LoginModel(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
-
         private void AttachJwtTokenToClient()
         {
             var token = HttpContext.Session.GetString("Token");
@@ -58,21 +63,46 @@ namespace Library_Web.Pages.Members
             {
                 var claims = DecodeJwtToken(token);
                 HttpContext.Session.SetString("Token", token);
-                if (claims.ContainsKey("fullName"))
+                if (claims.ContainsKey("fullName") && claims.ContainsKey("userID"))
                 {
                     var fullName = claims["fullName"];
                     HttpContext.Session.SetString("fullName", fullName);
+                    var id = claims["userID"];
+                    HttpContext.Session.SetString("userId", id);
+                    //_logger.LogInformation("User ID được lưu trong session: " + id);
+                    return RedirectToPage("/Index");
                 }
-                return RedirectToPage("/Index");
+                else
+                {
+                    _logger.LogError("Không tìm thấy userID trong token claims.");
+                    return RedirectToPage("/Index");
+                }
             }
             else
             {
-                // Thông báo lỗi nếu đăng nhập thất bại
                 ModelState.AddModelError(string.Empty, "Đăng nhập không thành công");
                 Console.WriteLine($"Username: {Username}, Password: {Password}");
                 return Page();
             }
         }
+
+        //public async Task<IActionResult> OnGetAsync()
+        //{
+        //    // Kiểm tra xem người dùng đã đăng nhập hay chưa
+        //    var token = HttpContext.Session.GetString("Token");
+        //    var userId = HttpContext.Session.GetString("userId");
+
+        //    if (!string.IsNullOrEmpty(token) || !string.IsNullOrEmpty(userId))
+        //    {
+        //        // Nếu người dùng đã đăng nhập, xóa các session hiện tại
+        //        HttpContext.Session.Remove("Token");
+        //        HttpContext.Session.Remove("userId");
+        //        HttpContext.Session.Remove("fullName"); // Xóa thêm các session khác nếu cần
+        //        _logger.LogInformation("Session đã được xóa vì người dùng quay lại trang đăng nhập.");
+        //    }
+
+        //    return Page();
+        //}
 
         private async Task<(bool loginSuccess, string token)> CheckLoginAsync(string username, string password)
         {
@@ -89,7 +119,6 @@ namespace Library_Web.Pages.Members
 
             return (true, responseData?.token);
         }
-
-
     }
+
 }

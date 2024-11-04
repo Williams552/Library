@@ -60,7 +60,7 @@ public partial class LibraryContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=LAPTOP-G5HQJSJ2\\SQLEXPRESS;Initial Catalog=Library;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=NGUYENKHANG;Initial Catalog=Library;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -124,6 +124,7 @@ public partial class LibraryContext : DbContext
                 .HasColumnName("deleted_at");
             entity.Property(e => e.DeletedBy).HasColumnName("deleted_by");
             entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.ImageLink).HasColumnName("image_link");
             entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
             entity.Property(e => e.MaxCopiesPerShelf).HasColumnName("max_copies_per_shelf");
             entity.Property(e => e.PdfLink).HasColumnName("pdf_link");

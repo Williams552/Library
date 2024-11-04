@@ -417,7 +417,8 @@ Height="auto">
   Kind="BookAdd" />
                             <TextBlock
   HorizontalAlignment="Center"
-  Text="BookG" />
+
+  Text="BookGroup" />
                         </StackPanel>
                     </TabItem.Header>
                     <StackPanel Margin="16">

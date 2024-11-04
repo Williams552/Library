@@ -39,7 +39,7 @@ namespace DataAccess.DAOs
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                        new Claim(ClaimTypes.NameIdentifier, member.MemberId.ToString()),
+                        new Claim("userID", member.MemberId.ToString()),
                         new Claim(ClaimTypes.Role, member.Role),
                         new Claim("fullName", member.FullName)
                     }),
@@ -54,7 +54,7 @@ namespace DataAccess.DAOs
         // Lay id cua tai khoan dang dang nhap dua tren jwt token lay duoc
         public int GetUserId()
         {
-            var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst("userID");
             if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
             {
                 return userId;
@@ -109,15 +109,17 @@ namespace DataAccess.DAOs
         // Cap nhat thanh vien 
         public async Task<(bool success, string mess, Member)> updateMember(Member member)
         {
+            // Kiểm tra xem member có tồn tại trong cơ sở dữ liệu không
             var existingMember = await getMemberById(member.MemberId);
             if (existingMember == null)
             {
                 return (false, "Không tìm thấy người này", null);
             }
+
+            // Cập nhật thông tin của member
             existingMember.IsDeleted = false;
             existingMember.UpdatedBy = GetUserId();
             existingMember.UpdatedAt = DateTime.Now;
-            existingMember.UpdatedBy = member.UpdatedBy;
             existingMember.FullName = member.FullName;
             existingMember.DateOfBirth = member.DateOfBirth;
             existingMember.Gender = member.Gender;
@@ -125,7 +127,10 @@ namespace DataAccess.DAOs
             existingMember.PhoneNumber = member.PhoneNumber;
             existingMember.Address = member.Address;
             existingMember.Username = member.Username;
-            existingMember.Password = BCrypt.Net.BCrypt.HashPassword(member.Password);
+            if (!string.IsNullOrEmpty(member.Password) && member.Password != existingMember.Password)
+            {
+                existingMember.Password = BCrypt.Net.BCrypt.HashPassword(member.Password);
+            }
             existingMember.IdCardNumber = member.IdCardNumber;
             existingMember.ProfilePicture = member.ProfilePicture;
             existingMember.GroupId = member.GroupId;
@@ -162,7 +167,8 @@ namespace DataAccess.DAOs
                 {
                     return (false, null, "Tài khoản hoặc mật khẩu không chính xác.");
                 }
-
+                Console.WriteLine("Password Entered: " + password);
+                Console.WriteLine("Stored Password Hash: " + member.Password);
                 if (!BCrypt.Net.BCrypt.Verify(password, member.Password))
                 {
                     return (false, null, "Tài khoản hoặc mật khẩu không chính xác.");

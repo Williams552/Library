@@ -65,7 +65,7 @@ namespace LibraryManagementAPI.Controllers
             return Ok(new {message});
         }
 
-        [HttpPost("checkLogin")]
+        [HttpPost("checkLogin")]    
         [AllowAnonymous]
         public async Task<IActionResult> Login(string username, string password)
         {

@@ -29,7 +29,12 @@ namespace WpfLibrary.ViewModel
 
         public ObservableCollection<Bookshelf> bookShelfs { get; set; } = new ObservableCollection<Bookshelf>();
 
+
         public ObservableCollection<Loan> loans { get; set; } = new ObservableCollection<Loan>();
+
+
+        public ObservableCollection<Book> book { get; set; } = new ObservableCollection<Book>();
+        public Book SelectedBook { get; set; }
 
         public Models.Staff SelectedStaff { get; set; } = new Models.Staff();
         public Supplier SelectedSupplier { get; set; } = new Supplier();
@@ -63,6 +68,7 @@ namespace WpfLibrary.ViewModel
             LoadBookGroupsAsync();
             LoadBookshelfAsync();
             LoadLoanAsync();
+            LoadBookAsync();
 
             //AttachJwtTokenToClient();
 
@@ -74,7 +80,7 @@ namespace WpfLibrary.ViewModel
             UpdateSupplierCommand = new RelayCommand(async (supplier) => await UpdateSupplierAsync((Supplier)supplier));
         }
 
-        private async Task LoadLoanAsync()
+        public async Task LoadLoanAsync()
         {
             var loanList = await _httpClient.GetFromJsonAsync<List<Loan>>("Loan");
             if (loanList != null)
@@ -173,7 +179,57 @@ namespace WpfLibrary.ViewModel
                 }
             }
         }
-        
+
+        public async Task LoadBookAsync()
+        {
+            var viewbook = await _httpClient.GetFromJsonAsync<List<Book>>("Book");
+            if (viewbook != null)
+            {
+                book.Clear();
+                foreach (var item in viewbook)
+                {
+                    book.Add(item);
+                }
+            }
+        }
+
+        public async Task AddBookAsync(Book newBook)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Book", newBook);
+            if (response.IsSuccessStatusCode)
+            {
+                var addedBook = await response.Content.ReadFromJsonAsync<Book>();
+                if (addedBook != null) book.Add(addedBook); // Add to local collection
+            }
+            else
+            {
+                MessageBox.Show("Lỗi khi thêm sách mới.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        public async Task UpdateBookAsync(Book updatedBook)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"Book/{updatedBook.BookId}", updatedBook);
+            if (response.IsSuccessStatusCode)
+            {
+                var index = book.IndexOf(book.FirstOrDefault(b => b.BookId == updatedBook.BookId));
+                if (index >= 0) book[index] = updatedBook; // Update local collection
+            }
+            else
+            {
+                MessageBox.Show("Lỗi khi cập nhật sách.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public async Task DeleteBookAsync(int bookId)
+        {
+            var respone = await _httpClient.DeleteAsync($"Book/{bookId}");
+            if (respone.IsSuccessStatusCode)
+            {
+                var dlbook = book.FirstOrDefault(c => c.BookId == bookId);
+                if (dlbook != null) book.Remove(dlbook);
+            }
+        }
+
         public bool checkname(string name)
         {
             
