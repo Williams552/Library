@@ -425,7 +425,7 @@ Height="auto">
                         <TextBlock Margin="0,0,0,8"
          Style="{StaticResource MaterialDesignHeadline5TextBlock}"
          Text="Books" />
-                        <DataGrid Height="400" IsReadOnly="True" ItemsSource="{Binding book}" SelectedItem="{Binding SelectedBook}" 
+                        <DataGrid Height="138" IsReadOnly="True" ItemsSource="{Binding book}" SelectedItem="{Binding SelectedBook}" 
 AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" SelectionChanged="BookData_SelectionChanged" x:Name="BookData">
                             <DataGrid.Resources>
                                 <Style TargetType="DataGridColumnHeader">
@@ -442,16 +442,17 @@ AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" SelectionCha
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding BookId}" Width="*"/>
                                 <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
-                                <DataGridTextColumn Header="Author" Binding="{Binding Author.Name}" Width="*"/>
-                                <DataGridTextColumn Header="Category" Binding="{Binding Category.Name}" Width="*"/>
-                                <DataGridTextColumn Header="Year" Binding="{Binding PublishYear}" Width="*"/>
-                                <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=C}" Width="*"/>
-                                <DataGridTextColumn Header="Available Copies" Binding="{Binding AvailableCopies}" Width="*"/>
-                                <DataGridTextColumn Header="Views" Binding="{Binding Views}" Width="*"/>
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                                <DataGridTextColumn Header="PublishYear" Binding="{Binding PublishYear}" Width="*"/>
+                                <DataGridTextColumn Header="MaxCopiesPerShelf" Binding="{Binding MaxCopiesPerShelf}" Width="*"/>
+                                <DataGridTextColumn Header="AuthorId" Binding="{Binding AuthorId}" Width="*"/>
+                                <DataGridTextColumn Header="SupplierId" Binding="{Binding SupplierId}" Width="*"/>
+                                <DataGridTextColumn Header="PublisherId" Binding="{Binding PublisherId}" Width="*"/>
+                                <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="*"/>
                             </DataGrid.Columns>
                         </DataGrid>
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="360">
                             <StackPanel Height="auto" HorizontalAlignment="Center" Margin="0,0,5,0">
                                 <StackPanel Margin="0">
                                     <TextBlock FontWeight="Bold" Text="Title" Margin="0,5,5,5" FontFamily="Arial Black"/>
@@ -476,15 +477,21 @@ Width="250" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left"/
 Width="250" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left"/>
                                 </StackPanel>
 
-                                <StackPanel Margin="0">
+                                <!--<StackPanel Margin="0">
                                     <TextBlock FontWeight="Bold" Text="Select Author" Margin="0,5,5,5" FontFamily="Arial Black"/>
                                     <ComboBox 
-    					                ItemsSource="{Binding Authors}" 
+    					                ItemsSource="{Binding authors}" 
     					                DisplayMemberPath="Name" 
     					                SelectedValuePath="AuthorId"
                                         x:Name="AuthorComboBox"
     					                SelectedValue="{Binding SelectedBook.AuthorId, Mode=TwoWay}" />
+                                </StackPanel>-->
+                                <StackPanel Margin="0">
+                                    <TextBlock FontWeight="Bold" Text="Author ID" Margin="0,5,5,5" FontFamily="Arial Black"/>
+                                    <TextBox BorderBrush="#333" BorderThickness="0.5" x:Name="bookauthor" Text="{Binding SelectedBook.AuthorId, UpdateSourceTrigger=PropertyChanged}" 
+Width="250" AcceptsReturn="True" TextWrapping="Wrap" HorizontalAlignment="Left"/>
                                 </StackPanel>
+
 
                                 <StackPanel Margin="0">
                                     <TextBlock FontWeight="Bold" Text="Select Category" Margin="0,5,5,5" FontFamily="Arial Black"/>
@@ -802,6 +809,66 @@ Text="{Binding NewLoan.Status, UpdateSourceTrigger=PropertyChanged}" Width="250"
                                 <Button Click="AddLoan_Click" Content="Add" Command="{Binding AddCommand}" Width="100" Margin="0,0,5,0" />
                                 <Button Click="UpdateLoan_Click" Content="Update" Command="{Binding UpdateCommand}" Width="100" Margin="5,0,5,0" />
                                 <Button Click="ClearLoan_Click" Content="Clear" Command="{Binding ClearCommand}" Width="100" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Width="auto" Height="auto">
+                            <materialDesign:PackIcon Width="24" Height="24" HorizontalAlignment="Center" Kind="AccountEdit" />
+                            <TextBlock HorizontalAlignment="Center" Text="Author" />
+                        </StackPanel>
+                    </TabItem.Header>
+
+                    <StackPanel Margin="16">
+                        <TextBlock Margin="0,0,0,8" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Author Management" />
+
+                        <!-- DataGrid for displaying suppliers -->
+                        <DataGrid Height="160" IsReadOnly="False" ItemsSource="{Binding authors}" 
+  SelectedItem="{Binding SelectedAuthor}" SelectionChanged="myAuthor_SelectionChanged"
+  AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,0,0,0" x:Name="myAuthor">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#333" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Padding" Value="5" />
+                                    <Setter Property="BorderBrush" Value="White" />
+                                    <Setter Property="BorderThickness" Value="0.5" />
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn IsReadOnly="True" Header="AuthorId" Binding="{Binding AuthorId}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="FullName" Binding="{Binding FullName}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="Biography" Binding="{Binding Biography}" />
+                                <DataGridTextColumn IsReadOnly="True" Header="Avartar" Binding="{Binding Avartar}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="0,10,10,0" Width="696" Height="228">
+                            <StackPanel Margin="10" HorizontalAlignment="Center" Orientation="Horizontal">
+                                <StackPanel Margin="0,0,10,0">
+                                    <TextBlock FontWeight="Bold" Text="FullName" Margin="5" />
+                                    <TextBox x:Name="txtFullNameAuthor" BorderBrush="#333" BorderThickness="0.5" 
+             Text="{Binding NewAuthor.FullName, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+
+                                    <TextBlock FontWeight="Bold" Text="Biography" Margin="5" />
+                                    <TextBox x:Name="txtBiography" BorderBrush="#333" BorderThickness="0.5" 
+             Text="{Binding NewAuthor.Biography, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+                                    <TextBlock FontWeight="Bold" Text="Avartar" Margin="5" />
+                                    <TextBox x:Name="txtAvartar" BorderBrush="#333" BorderThickness="0.5" 
+Text="{Binding NewAuthor.Avartar, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- Buttons for CRUD operations -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                                <Button Click="AddAuthor_Click" Content="Add" Command="{Binding AddAuthorCommand}" Width="100" Margin="0,0,5,0" />
+                                <Button Click="UpdateAuthor_Click" Content="Update" Command="{Binding UpdateAuthorCommand}" Width="100" Margin="5,0,5,0" />
+                                <Button Click="DeleteAuthor_Click" Content="Delete" Command="{Binding DeleteAuthorCommand}" Width="100" Margin="5,0,5,0" />
+                                <Button Click="ClearAuthor_Click" Content="Clear" Command="{Binding ClearAuthorCommand}" Width="100" />
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>

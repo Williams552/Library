@@ -19,7 +19,7 @@ namespace WpfLibrary.ViewModel
         public ObservableCollection<Category> Cate { get; set; } = new ObservableCollection<Category>();
 
         public ObservableCollection<Publisher> Pub { get; set; } = new ObservableCollection<Publisher>();
-        public ObservableCollection<Author> Authors { get; set; } = new ObservableCollection<Author>();
+        public ObservableCollection<Author> authors { get; set; } = new ObservableCollection<Author>();
         public ObservableCollection<Fee> fee { get; set; } = new ObservableCollection<Fee>();
         public ObservableCollection<Models.Staff> StaffMembers { get; set; } = new ObservableCollection<Models.Staff>();
         public ObservableCollection<Supplier> suppliers { get; set; } = new ObservableCollection<Supplier>();
@@ -33,6 +33,7 @@ namespace WpfLibrary.ViewModel
 
 
         public ObservableCollection<Book> book { get; set; } = new ObservableCollection<Book>();
+
         public Book SelectedBook { get; set; }
 
         public Models.Staff SelectedStaff { get; set; } = new Models.Staff();
@@ -46,6 +47,7 @@ namespace WpfLibrary.ViewModel
         public Bookshelf SelectedBookshelf { get; set; }
 
         public Loan SelectedLoan { get; set; }
+        public Author SelectedAuthor { get; set; }
 
         public ICommand AddStaffCommand { get; }
         public ICommand UpdateStaffCommand { get; }
@@ -58,7 +60,7 @@ namespace WpfLibrary.ViewModel
         public LibraryViewModel()
         {
             _httpClient = new HttpClient(); // Chỉ khởi tạo một lần
-            _httpClient.BaseAddress = new Uri("https://localhost:7143/api/"); // Đặt URL cơ sở cho tất cả các API
+            _httpClient.BaseAddress = new Uri("http://localhost:5139/api/"); // Đặt URL cơ sở cho tất cả các API
             LoadCategoriesAsync();
             LoadFeeAsync();
             LoadPublisherAsync();
@@ -93,16 +95,17 @@ namespace WpfLibrary.ViewModel
         }
         public async Task LoadAuthorAsync()
         {
-            var authors = await _httpClient.GetFromJsonAsync<List<Author>>("Author");
-            if (authors != null)
+            var authorList = await _httpClient.GetFromJsonAsync<List<Author>>("Authors");
+            if (authorList != null)
             {
-                Authors.Clear();
-                foreach (var item in authors)
+                authors.Clear();
+                foreach (var author in authorList)
                 {
-                    Authors.Add(item);
+                    authors.Add(author);
                 }
             }
         }
+
         private bool CanDelete(object? arg)
         {
             return SelectedStaff != null && SelectedStaff.StaffId > 0;
@@ -562,6 +565,46 @@ namespace WpfLibrary.ViewModel
                     {
                         loans[index] = loan;
                     }
+                }
+            }
+        }
+
+        public async Task AddAuthorAsync(Author author)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Authors", author);
+            if (response.IsSuccessStatusCode)
+            {
+                authors.Add(author);
+                SelectedAuthor = new Author();
+            }
+        }
+
+        public async Task UpdateAuthorAsync(Author author)
+        {
+            if (author != null)
+            {
+                var response = await _httpClient.PutAsJsonAsync($"Authors/{author.AuthorId}", author);
+                if (response.IsSuccessStatusCode)
+                {
+                    var index = authors.IndexOf(authors.First(s => s.AuthorId == author.AuthorId));
+                    if (index >= 0)
+                    {
+                        authors[index] = author;
+                    }
+                }
+            }
+        }
+
+        public async Task DeleteAuthorAsync(int authorid)
+        {
+            var response = await _httpClient.DeleteAsync($"Authors/{authorid}");
+            if (response.IsSuccessStatusCode)
+            {
+                var author = authors.FirstOrDefault(s => s.AuthorId == authorid);
+                if (author != null)
+                {
+                    authors.Remove(author);
+                    SelectedAuthor = new Author();
                 }
             }
         }

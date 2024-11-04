@@ -158,6 +158,14 @@ namespace WpfLibrary
 
         }
 
+        private void ClearFieldsAuthor()
+        {
+            txtFullNameAuthor.Clear();
+            txtBiography.Clear();
+            txtAvartar.Clear();
+
+        }
+
         private void ClearFieldsLoan()
         {
             txtUserId.Clear();
@@ -781,7 +789,8 @@ namespace WpfLibrary
                 DescriptionTextBox.Text = select.Description;
                 PublishYearTextBox.Text = select.PublishYear?.ToString() ?? string.Empty;
                 MaxCopiesPerShelfTextBox.Text = select.MaxCopiesPerShelf?.ToString() ?? string.Empty;
-                AuthorComboBox.SelectedValue = select.AuthorId;
+                //AuthorComboBox.SelectedValue = select.AuthorId;
+                bookauthor.Text = select.AuthorId.ToString();
                 CategoryComboBox.SelectedValue = select.CategoryId;
                 SupplierComboBox.SelectedValue = select.SupplierId;
                 PublisherComboBox.SelectedValue = select.PublisherId;
@@ -799,7 +808,8 @@ namespace WpfLibrary
             if (!string.IsNullOrEmpty(TitleTextBox.Text) &&
                 !string.IsNullOrEmpty(PublishYearTextBox.Text) &&
                 !string.IsNullOrEmpty(PriceTextBox.Text) &&
-                AuthorComboBox.SelectedValue != null &&
+                !string.IsNullOrEmpty(bookauthor.Text) &&
+                //AuthorComboBox.SelectedValue != null &&
                 CategoryComboBox.SelectedValue != null &&
                 SupplierComboBox.SelectedValue != null &&
                 PublisherComboBox.SelectedValue != null)
@@ -813,7 +823,8 @@ namespace WpfLibrary
                     Description = DescriptionTextBox.Text,
                     PublishYear = int.TryParse(PublishYearTextBox.Text, out int publishYear) ? publishYear : (int?)null,
                     MaxCopiesPerShelf = int.TryParse(MaxCopiesPerShelfTextBox.Text, out int maxCopies) ? maxCopies : (int?)null,
-                    AuthorId = (int)AuthorComboBox.SelectedValue,
+                    //AuthorId = (int)AuthorComboBox.SelectedValue,
+                    AuthorId = Int32.Parse(bookauthor.Text),
                     CategoryId = (int)CategoryComboBox.SelectedValue,
                     SupplierId = (int)SupplierComboBox.SelectedValue,
                     PublisherId = (int)PublisherComboBox.SelectedValue,
@@ -845,7 +856,8 @@ namespace WpfLibrary
                 select.Description = DescriptionTextBox.Text;
                 select.PublishYear = int.TryParse(PublishYearTextBox.Text, out int publishYear) ? publishYear : (int?)null;
                 select.MaxCopiesPerShelf = int.TryParse(MaxCopiesPerShelfTextBox.Text, out int maxCopies) ? maxCopies : (int?)null;
-                select.AuthorId = AuthorComboBox.SelectedValue is int authorId ? authorId : select.AuthorId;
+                select.AuthorId = Int32.Parse(bookauthor.Text);
+                //select.AuthorId = AuthorComboBox.SelectedValue is int authorId ? authorId : select.AuthorId;
                 select.CategoryId = CategoryComboBox.SelectedValue is int categoryId ? categoryId : select.CategoryId;
                 select.SupplierId = SupplierComboBox.SelectedValue is int supplierId ? supplierId : select.SupplierId;
                 select.PublisherId = PublisherComboBox.SelectedValue is int publisherId ? publisherId : select.PublisherId;
@@ -878,7 +890,7 @@ namespace WpfLibrary
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    _LibraryViewModel.DeleteBookshelfAsync(select.BookId);
+                    _LibraryViewModel.DeleteBookAsync(select.BookId);
 
 
 
@@ -890,5 +902,94 @@ namespace WpfLibrary
                 MessageBox.Show("Vui lòng chọn sách cần xóa.");
             }
         }
+
+        private void AddAuthor_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtFullNameAuthor.Text) && !string.IsNullOrEmpty(txtBiography.Text) && !string.IsNullOrEmpty(txtAvartar.Text))
+            {
+
+
+                var newAuthor = new Author
+                {
+
+                    FullName = txtFullNameAuthor.Text,
+                    Biography = txtBiography.Text,
+                    Avartar = txtAvartar.Text
+                };
+
+                _LibraryViewModel.AddAuthorAsync(newAuthor);
+
+
+
+                ClearFieldsAuthor();
+
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin danh mục.");
+            }
+        }
+
+        private void UpdateAuthor_Click(object sender, RoutedEventArgs e)
+        {
+            if (myAuthor.SelectedItem is Author selectedAuthor)
+            {
+                //selectedStaff.StaffId = Int32.Parse(txtStaffid.Text);
+                selectedAuthor.FullName = txtFullNameAuthor.Text;
+                selectedAuthor.Biography = txtBiography.Text;
+                selectedAuthor.Avartar = txtAvartar.Text;
+
+
+
+
+                _LibraryViewModel.UpdateAuthorAsync(selectedAuthor);
+                ClearFieldsAuthor();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần cập nhật.");
+            }
+        }
+
+        private void DeleteAuthor_Click(object sender, RoutedEventArgs e)
+        {
+            if (myAuthor.SelectedItem is Author selectedAuthor)
+            {
+                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa Author này không?",
+                                              "Xác nhận xóa",
+                                              MessageBoxButton.YesNo,
+                                              MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _LibraryViewModel.DeleteAuthorAsync(selectedAuthor.AuthorId);
+
+
+
+                    ClearFieldsAuthor();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn danh mục cần xóa.");
+            }
+        }
+
+        private void ClearAuthor_Click(object sender, RoutedEventArgs e)
+        {
+            txtFullNameAuthor.Clear();
+            txtBiography.Clear();
+            txtAvartar.Clear();
+        }
+
+        private void myAuthor_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (myAuthor.SelectedItem is Author selectedAuthor)
+            {
+                // Cập nhật các trường nhập liệu với thông tin của danh mục đã chọn
+                txtFullNameAuthor.Text = selectedAuthor.FullName;
+                txtBiography.Text = selectedAuthor.Biography;
+                txtAvartar.Text = selectedAuthor.Avartar;
+            }
+            }
     }
 }
